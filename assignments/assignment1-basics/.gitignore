@@ -163,9 +163,9 @@ cython_debug/
 *.zip
 
 # --- CS336 local data & artifacts (do not commit) ---
-data/*
-!data/.gitkeep
-*.zip
+data/*.txt
+data/*.gz
+data/owt_train_2gb.txt
 
 # Token memmaps and checkpoints (keep *.meta.json)
 artifacts/tokens/*.bin
