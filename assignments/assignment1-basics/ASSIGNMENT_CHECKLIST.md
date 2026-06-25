@@ -1,6 +1,6 @@
 # Assignment 1 Completion Checklist
 
-Updated: 2026-06-25T17:13:53.377154+00:00
+Updated: 2026-06-25T17:32:12.852756+00:00
 
 ## Code & tests
 - [x] `uv run pytest -q` — 47 passed, 1 xfail
@@ -16,12 +16,12 @@ Updated: 2026-06-25T17:13:53.377154+00:00
 
 ## Deliverables
 - [x] `writeup.md` (export to PDF for Gradescope)
-- [x] `cs336-spring2025-assignment-1-submission.zip`
+- [ ] `cs336-spring2025-assignment-1-submission.zip`
 - [x] `artifacts/experiment_log.md`
 
 ## After OWT pipeline finishes
 ```bash
-cd /Users/mangeshraut/Downloads/Standford_CS336/assignment1-basics-main
+cd /Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics
 uv run python scripts/finalize_assignment.py
 bash make_submission.sh
 ```

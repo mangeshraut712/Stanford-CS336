@@ -26,7 +26,7 @@ This folder **is** our Assignment 1 solution: original implementation wired thro
 ## Verify the solution
 
 ```bash
-cd assignment1-basics-main
+cd assignments/assignment1-basics
 uv run pytest -q          # expect: 47 passed, 1 xfailed
 ```
 

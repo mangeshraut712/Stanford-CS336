@@ -3,11 +3,6 @@
 .idea/
 .vscode/
 
-# Assignment stubs not yet committed (starter downloads)
-assignment2-systems-main/
-assignment3-scaling-main/
-assignment4-data-main/
-assignment5-alignment-main/
-
-# Lectures optional — large; add explicitly if desired
+# Assignment stubs (local downloads, not committed)
+assignment*-main/
 lectures-main/

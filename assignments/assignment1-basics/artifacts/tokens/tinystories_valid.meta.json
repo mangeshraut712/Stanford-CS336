@@ -1,0 +1,9 @@
+{
+  "input": "data/TinyStoriesV2-GPT4-valid.txt",
+  "output": "artifacts/tokens/tinystories_valid.bin",
+  "num_tokens": 5465909,
+  "dtype": "uint16",
+  "elapsed_sec": 19.608978033065796,
+  "max_token_id": 9999,
+  "why_uint16": "vocab sizes up to 32k fit in uint16; halves storage vs int32/int64 for memmap training."
+}
