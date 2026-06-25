@@ -1,0 +1,11 @@
+{
+  "name": "tinystories_10k",
+  "input": "data/TinyStoriesV2-GPT4-train.txt",
+  "vocab_size": 10000,
+  "num_merges": 9743,
+  "elapsed_sec": 618.455157995224,
+  "peak_rss_gb": 0.0700836181640625,
+  "start_rss_gb": 0.026336669921875,
+  "longest_token_bytes": 15,
+  "longest_token_repr": " accomplishment"
+}

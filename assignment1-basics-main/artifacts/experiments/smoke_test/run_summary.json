@@ -1,0 +1,7 @@
+{
+  "final_train_loss": 5.633291149139405,
+  "final_val_loss": 5.128091115951538,
+  "total_elapsed_sec": 174.38502407073975,
+  "total_tokens_seen": 819200,
+  "generated_sample_path": "artifacts/experiments/smoke_test/generated_sample.txt"
+}

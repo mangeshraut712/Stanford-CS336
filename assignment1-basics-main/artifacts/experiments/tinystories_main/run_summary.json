@@ -1,0 +1,7 @@
+{
+  "final_train_loss": 2.0725656640529633,
+  "final_val_loss": 2.0679032961527506,
+  "total_elapsed_sec": 2166.2111201286316,
+  "total_tokens_seen": 20480000,
+  "generated_sample_path": "/Users/mangeshraut/Downloads/Standford_CS336/assignment1-basics-main/artifacts/experiments/tinystories_main/generated_sample.txt"
+}
