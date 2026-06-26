@@ -172,11 +172,13 @@ uv run python train.py --train-tokens artifacts/tokens/tinystories_train.bin \
 |-----|----------|------------|------|
 | smoke_test | 5.1281 | 5.6333 | 2.9 min |
 | tinystories_main | 2.0679 | 2.0726 | 36.1 min |
-| owt_main | pending | — | — |
+| owt_main | 5.3765 | 5.3621 | 463.6 min |
 
-*Last updated: 2026-06-26T05:11:28.079596+00:00*
+*Last updated: 2026-06-26T05:48:26.086295+00:00*
 
 <!-- METRICS:END -->
+
+
 
 
 

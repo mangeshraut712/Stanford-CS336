@@ -1,6 +1,6 @@
 # Assignment 1 Completion Checklist
 
-Updated: 2026-06-26T05:11:28.079596+00:00
+Updated: 2026-06-26T05:48:26.086295+00:00
 
 ## Code & tests
 - [x] `uv run pytest -q` — 47 passed, 1 xfail
@@ -11,7 +11,7 @@ Updated: 2026-06-26T05:11:28.079596+00:00
 ## Training runs
 - [x] smoke_test
 - [x] tinystories_main — val 2.0679
-- [ ] owt_main
+- [x] owt_main
 - [ ] leaderboard_mod (optional / skipped on fast path)
 
 ## Deliverables

@@ -1,0 +1,7 @@
+{
+  "final_train_loss": 5.362124738693237,
+  "final_val_loss": 5.376497507095337,
+  "total_elapsed_sec": 27818.533983945847,
+  "total_tokens_seen": 16384000,
+  "generated_sample_path": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/artifacts/experiments/owt_main/generated_sample.txt"
+}

@@ -7,7 +7,7 @@ This log tracks all training runs and experiments for Assignment 1.
 - Machine: MacBook Pro (Apple Silicon, MPS)
 - Python: 3.12 via `uv`
 - Repo: `assignment1-basics-main`
-- Last sync: 2026-06-26T05:11:28.079596+00:00
+- Last sync: 2026-06-26T05:48:26.086295+00:00
 
 ## §2.5 BPE Training
 
@@ -34,7 +34,7 @@ Target on B200: 327M tokens, val loss ≤ 2.00. Mac fast path uses ~20M tokens a
 
 | Run | Steps | Batch | Val loss | Status |
 |-----|-------|-------|----------|--------|
-| `owt_main` | 2500 | 32 | — | pending |
+| `owt_main` | 2500 | 32 | 5.3765 | done |
 
 ## §7.5 Leaderboard Modification
 

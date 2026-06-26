@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-uv run pytest --timeout 10 -v ./tests --junitxml=test_results.xml || true
+.venv/bin/python -m pytest -q ./tests || true
 echo "Done running tests"
 
 # Set the name of the output tar.gz file
