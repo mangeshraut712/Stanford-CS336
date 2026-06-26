@@ -6,3 +6,7 @@
 # Assignment stubs (local downloads, not committed)
 assignment*-main/
 lectures-main/
+
+# Large / generated (keep out of monorepo root)
+*.zip
+.DS_Store

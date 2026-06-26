@@ -1,34 +1,49 @@
 # Stanford CS336 — Language Modeling from Scratch
 
-Self-study solutions for [Stanford CS336](https://cs336.stanford.edu/spring2025/).
+Self-study / portfolio implementations for [Stanford CS336](https://cs336.stanford.edu/spring2025/).  
+**Not** enrolled for course credit — learning and building in public on GitHub.
 
-**Author:** [Mangesh Raut](https://github.com/mangeshraut712)
+**Author:** [Mangesh Raut](https://github.com/mangeshraut712) · **Repo:** https://github.com/mangeshraut712/Stanford-CS336
 
 ## Assignments
 
 | # | Name | Path | Status |
 |---|------|------|--------|
-| 1 | [Basics](https://github.com/stanford-cs336/assignment1-basics) | [`assignments/assignment1-basics/`](assignments/assignment1-basics/) | **Code + tests done** · TS val loss 2.07 · OWT pending |
-| 2 | [Systems](https://github.com/stanford-cs336/assignment2-systems) | — | Not started |
+| 1 | [Basics](https://github.com/stanford-cs336/assignment1-basics) | [`assignments/assignment1-basics/`](assignments/assignment1-basics/) | **Complete** — TS val 2.07, OWT val 5.38 |
+| 2 | [Systems](https://github.com/stanford-cs336/assignment2-systems) | [`assignments/assignment2-systems/`](assignments/assignment2-systems/) | **Next** |
 | 3 | [Scaling](https://github.com/stanford-cs336/assignment3-scaling) | — | Not started |
 | 4 | [Data](https://github.com/stanford-cs336/assignment4-data) | — | Not started |
 | 5 | [Alignment](https://github.com/stanford-cs336/assignment5-alignment) | — | Not started |
 
-## Assignment 1 quick start
+## Assignment 1 (done)
 
 ```bash
 cd assignments/assignment1-basics
 uv run pytest -q
 ```
 
-See [`assignments/assignment1-basics/README.md`](assignments/assignment1-basics/README.md) for data download, training pipelines, and writeup.
+- All unit tests pass (47 + 1 intentional xfail)
+- TinyStories + OWT pipelines run on Mac (fast path)
+- Docs: `writeup.md`, `writeup.pdf`, `SOLUTION.md`, `LEARNINGS.md`
+- **No submission zips** — source and small artifacts live in git
+
+See [`assignments/assignment1-basics/PROJECT_STATUS.md`](assignments/assignment1-basics/PROJECT_STATUS.md).
+
+## Assignment 2 (starting)
+
+```bash
+cd assignments/assignment2-systems
+# follow README there after uv sync
+```
 
 ## What belongs on GitHub
 
-- Source code (`cs336_basics/`, `train.py`, `tests/`, `scripts/`)
-- Docs (`writeup.md`, `SOLUTION.md`, `LEARNINGS.md`)
-- Small artifacts (BPE vocab JSON, `run_summary.json`, `*.meta.json`, generated samples)
-- **Not** in git: `data/` corpora, token `.bin` files, model checkpoints, `.venv/`, submission `.zip`
+| Track in git | Keep local only |
+|--------------|-----------------|
+| Source (`cs336_basics/`, `train.py`, `tests/`, `scripts/`) | `data/` corpora |
+| Docs (`writeup.md`, `writeup.pdf`, `SOLUTION.md`, …) | Token `.bin` memmaps |
+| Small artifacts (BPE JSON, `run_summary.json`, `*.meta.json`) | Model checkpoints (`.pt`) |
+| | `.venv/`, `*.zip`, pipeline logs |
 
 ## Course links
 

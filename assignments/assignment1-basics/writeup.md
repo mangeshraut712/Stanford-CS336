@@ -136,14 +136,15 @@ All adapter-backed tests pass. `encode_iterable` memory test passes on macOS; `e
 
 ---
 
-## 7. Submission
+## 7. Documentation & repo
+
+This folder is a **learning project** on GitHub, not a Gradescope submission.
 
 ```bash
-bash make_submission.sh
-# → cs336-spring2025-assignment-1-submission.zip
+bash scripts/finalize_assignment.sh   # pytest + sync metrics + writeup.pdf
 ```
 
-Gradescope: upload `writeup.pdf` (export this file) + `code.zip`.
+Published artifacts: `writeup.md`, `writeup.pdf`, `SOLUTION.md`, `artifacts/experiment_log.md`.
 
 ---
 
@@ -174,9 +175,10 @@ uv run python train.py --train-tokens artifacts/tokens/tinystories_train.bin \
 | tinystories_main | 2.0679 | 2.0726 | 36.1 min |
 | owt_main | 5.3765 | 5.3621 | 463.6 min |
 
-*Last updated: 2026-06-26T05:48:26.086295+00:00*
+*Last updated: 2026-06-26T06:31:15.885064+00:00*
 
 <!-- METRICS:END -->
+
 
 
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
-# OPTIONAL: official course submission zip (Gradescope). Not used in this learning repo.
 set -euo pipefail
 
-.venv/bin/python -m pytest -q ./tests || true
+uv run pytest -v ./tests --junitxml=test_results.xml || true
 echo "Done running tests"
 
 # Set the name of the output tar.gz file
-output_file="cs336-spring2025-assignment-1-submission.zip"
+output_file="cs336-spring2024-assignment-2-submission.zip"
 rm "$output_file" || true
 
 # Compress all files in the current directory into a single zip file
@@ -26,12 +25,8 @@ zip -r "$output_file" . \
     -x '*.err' \
     -x '.git*' \
     -x '.venv/*' \
-    -x '.*' \
-    -x 'tests/fixtures' \
-    -x 'tests/_snapshots' \
+    -x '*.bin' \
     -x '*.pt' \
-    -x '*.pth' \
-    -x '*.npy' \
-    -x '*.npz'
+    -x '*.pth'
 
 echo "All files have been compressed into $output_file"

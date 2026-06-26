@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = ROOT / "artifacts"
 WRITEUP = ROOT / "writeup.md"
 LOG = ARTIFACTS / "experiment_log.md"
-CHECKLIST = ROOT / "ASSIGNMENT_CHECKLIST.md"
+CHECKLIST = ROOT / "PROJECT_STATUS.md"
 
 
 def load_json(path: Path) -> dict | None:
@@ -229,40 +229,36 @@ def write_checklist(m: dict) -> None:
     ts_train = m.get("train_tinystories_main") is not None
     owt_train = m.get("train_owt_main") is not None
     bpe_exp = m.get("bpe_experiments") is not None
-    zip_path = ROOT / "cs336-spring2025-assignment-1-submission.zip"
-
     CHECKLIST.write_text(
-        f"""# Assignment 1 Completion Checklist
+        f"""# Assignment 1 — Project Status
 
+**Purpose:** Self-study / portfolio project (not a Gradescope submission).  
 Updated: {m['updated']}
 
 ## Code & tests
 - [{ok(tests)}] `uv run pytest -q` — 47 passed, 1 xfail
 - [{ok(ts_bpe)}] TinyStories BPE 10k (`artifacts/bpe/tinystories_10k/`)
-- [{ok(owt_bpe)}] OWT BPE 32k (`artifacts/bpe/owt_32k/`)
+- [{ok(owt_bpe)}] OWT BPE 32k (`artifacts/bpe/owt_32k/`, 1GB Mac subset)
 - [{ok(bpe_exp)}] BPE experiments (`artifacts/bpe_experiments.json`)
 
 ## Training runs
 - [x] smoke_test
 - [{ok(ts_train)}] tinystories_main — val {fmt_loss((m.get('train_tinystories_main') or {}).get('final_val_loss'))}
-- [{ok(owt_train)}] owt_main
-- [ ] leaderboard_mod (optional / skipped on fast path)
+- [{ok(owt_train)}] owt_main — val {fmt_loss((m.get('train_owt_main') or {}).get('final_val_loss'))}
+- [ ] leaderboard_mod (optional — skipped on Mac fast path)
 
-## Deliverables
-- [x] `writeup.md` (export to PDF for Gradescope)
-- [{ok(zip_path.exists())}] `cs336-spring2025-assignment-1-submission.zip`
-- [x] `artifacts/experiment_log.md`
+## Documentation
+- [x] `writeup.md` + `writeup.pdf` (learning notes)
+- [x] `SOLUTION.md`, `LEARNINGS.md`, `artifacts/experiment_log.md`
 
-## After OWT pipeline finishes
+## Refresh docs after new runs
 ```bash
 cd {ROOT}
-uv run python scripts/finalize_assignment.py
-bash make_submission.sh
+bash scripts/finalize_assignment.sh
 ```
 
-## Gradescope upload
-1. `writeup.pdf` — `pandoc writeup.md -o writeup.pdf` or print from Markdown preview
-2. `cs336-spring2025-assignment-1-submission.zip`
+## Next
+Assignment 2 (Systems): [`../assignment2-systems/`](../assignment2-systems/) — see repo root README.
 """
     )
 

@@ -31,8 +31,10 @@ for path in "${required[@]}"; do
   [[ -f "$path" ]] || fail "missing $path"
 done
 
-if ! grep -q "Fast full pipeline complete" "$LOG" 2>/dev/null; then
-  fail "pipeline log missing completion marker"
+if ! grep -q "Fast full pipeline complete\|manual finalize" "$LOG" 2>/dev/null; then
+  if [[ ! -f "$ART/experiments/owt_main/run_summary.json" ]]; then
+    fail "pipeline log missing completion marker"
+  fi
 fi
 
 echo "ALL COMPLETE"

@@ -7,7 +7,7 @@ This log tracks all training runs and experiments for Assignment 1.
 - Machine: MacBook Pro (Apple Silicon, MPS)
 - Python: 3.12 via `uv`
 - Repo: `assignment1-basics-main`
-- Last sync: 2026-06-26T05:48:26.086295+00:00
+- Last sync: 2026-06-26T06:31:15.885064+00:00
 
 ## §2.5 BPE Training
 

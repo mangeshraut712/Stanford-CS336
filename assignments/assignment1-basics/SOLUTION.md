@@ -41,8 +41,8 @@ The xfail is intentional: `test_encode_memory_usage` documents a non-streaming e
 | TinyStories BPE 10k | 10.3 min, longest token `" accomplishment"` |
 | TinyStories tokenize (train) | 541M tokens, ~34 min |
 | `tinystories_main` (2500 steps, batch 32) | **val loss 2.07**, ~36 min |
-| OWT BPE 32k (2GB subset) | In progress |
-| `owt_main` | Pending (after OWT BPE) |
+| OWT BPE 32k (1GB subset) | ~159 min |
+| `owt_main` (2000 steps, batch 32) | **val loss 5.38**, ~7.7 hr wall (incl. sleep) |
 
 Full tables: `artifacts/experiment_log.md`, `writeup.md` §9.
 
@@ -55,36 +55,32 @@ cs336_basics/          # Core library (your implementation)
 tests/adapters.py      # Bridges tests → cs336_basics
 train.py               # Training loop
 scripts/               # BPE, tokenize, experiments, pipelines
-writeup.md             # Gradescope writeup (export to PDF)
+writeup.md             # Learning writeup (Markdown + PDF)
+PROJECT_STATUS.md      # Completion tracker
 LEARNINGS.md           # Self-study notes
-artifacts/             # Tokenizers, token bins, experiment outputs
+artifacts/             # Tokenizers, metrics, samples (see artifacts/README.md)
 ```
 
 ---
 
-## Package for submission
+## Sync docs
 
 ```bash
-# Code zip for Gradescope
-bash make_submission.sh
-# → cs336-spring2025-assignment-1-submission.zip
-
-# Sync metrics + rebuild after OWT finishes
-bash scripts/finalize_assignment.sh
+bash scripts/finalize_assignment.sh   # pytest + metrics + writeup.pdf
 ```
 
-Checklist: `ASSIGNMENT_CHECKLIST.md`
+Status: `PROJECT_STATUS.md`
 
 ---
 
 ## Use with Assignment 2
 
-When starting [assignment2-systems](https://github.com/stanford-cs336/assignment2-systems):
+When starting [assignment2-systems](https://github.com/stanford-cs336/assignment2-systems) in this monorepo:
 
 ```bash
-git clone https://github.com/stanford-cs336/assignment2-systems.git
-cp -R assignment1-basics-main/cs336_basics assignment2-systems/cs336-basics/
-# Or replace cs336-basics/ entirely and fix pyproject.toml paths
+cd assignments/assignment2-systems
+# Copy or symlink your A1 package — see assignment2 README
+cp -R ../assignment1-basics/cs336_basics ./cs336_basics
 ```
 
 Assignment 2 ships a staff `cs336-basics` reference — **replace it with this folder** to use your own A1 solution.
@@ -93,8 +89,8 @@ Assignment 2 ships a staff `cs336-basics` reference — **replace it with this f
 
 ## What’s optional / still running
 
-- **OWT full corpus** — we use a 2GB subset on Mac (`data/owt_train_2gb.txt`)
+- **OWT full corpus** — we use a **1GB** subset on Mac (`data/owt_train_1gb.txt`)
 - **Leaderboard mod** — skipped on fast path; optional for full handout
 - **327M tokens on B200** — course target; we used ~20M tokens on Mac
 
-These do not block using this solution for Assignment 2 or self-study completion.
+These do not block Assignment 2 or treating Assignment 1 as a complete learning project.
