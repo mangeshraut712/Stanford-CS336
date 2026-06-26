@@ -1,0 +1,65 @@
+{
+  "compression_tinystories_docs": {
+    "tinystories_tokenizer": [
+      4.097777777777778,
+      3.9507042253521125,
+      4.16044776119403,
+      4.12280701754386,
+      3.7964601769911503,
+      4.09375,
+      3.85,
+      4.0,
+      4.324074074074074,
+      4.149659863945578
+    ],
+    "owt_tokenizer": [
+      4.079646017699115,
+      3.8689655172413793,
+      4.35546875,
+      4.086956521739131,
+      3.6982758620689653,
+      4.09375,
+      3.795774647887324,
+      3.7948717948717947,
+      4.207207207207207,
+      4.066666666666666
+    ]
+  },
+  "compression_owt_docs": {
+    "tinystories_tokenizer": [
+      3.0719002201027146,
+      3.2184343434343434,
+      3.514063892070765,
+      3.176791277258567,
+      2.913984311604003,
+      3.2066532258064515,
+      3.051656920077973,
+      3.1917418130042714,
+      3.1355685131195337,
+      3.550561797752809
+    ],
+    "owt_tokenizer": [
+      4.229292929292929,
+      5.175634517766498,
+      4.438193216524675,
+      3.7115559599636034,
+      4.065283018867924,
+      4.356681666992761,
+      4.21399730820996,
+      4.386823222439661,
+      4.5,
+      4.144262295081967
+    ]
+  },
+  "avg_compression_tinystories_docs": {
+    "tinystories_tokenizer": 4.054568089687858,
+    "owt_tokenizer": 4.0047582985381585
+  },
+  "avg_compression_owt_docs": {
+    "tinystories_tokenizer": 3.203135631423143,
+    "owt_tokenizer": 4.322172413513998
+  },
+  "owt_with_tinystories_tokenizer_note": "OWT web text is more heterogeneous than TinyStories children's fiction; the 10K TinyStories tokenizer typically yields lower compression (more bytes/token) on OWT.",
+  "throughput_bytes_per_sec": 1383211.1960768576,
+  "pile_825gb_hours_estimate": 177.89462329727564
+}

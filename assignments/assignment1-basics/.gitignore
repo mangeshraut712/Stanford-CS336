@@ -173,7 +173,7 @@ artifacts/experiments/*/final_model/
 artifacts/experiments/*/latest_model/
 artifacts/pipeline*.log
 artifacts/pipeline.pid
-artifacts/bpe/owt_32k/
+artifacts/pipeline_monitor.log
 test_results.xml
 *.bin
 *.pt

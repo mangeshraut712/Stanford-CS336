@@ -20,8 +20,9 @@ Download datasets first — see [DATA.md](./DATA.md).
 |------|--------|
 | Unit tests | 47 passed, 1 xfail |
 | TinyStories BPE + train | Done (val loss **2.07**) |
-| OWT BPE 32k + `owt_main` | Pending (run `bash scripts/run_fast.sh`) |
-| Writeup | [writeup.md](./writeup.md) |
+| OWT BPE 32k + tokenization | Done (1GB subset) |
+| `owt_main` training | In progress (~2000 steps) — run `bash scripts/watch_pipeline.sh` |
+| Writeup | [writeup.md](./writeup.md) — re-run `finalize_assignment.py` after `owt_main` |
 
 ## Layout
 

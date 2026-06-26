@@ -6,7 +6,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 echo "=== pytest ==="
-uv run pytest -q
+.venv/bin/python -m pytest -q
 
 echo "=== sync writeup + checklist ==="
 uv run python scripts/finalize_assignment.py

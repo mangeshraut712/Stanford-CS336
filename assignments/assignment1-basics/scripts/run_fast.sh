@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fast path A: full assignment with OWT 2GB subset + reduced steps.
+# Fast path A: OWT 1GB subset + caffeinate. Restarts safely via continue_fast.sh.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

@@ -7,18 +7,18 @@ This log tracks all training runs and experiments for Assignment 1.
 - Machine: MacBook Pro (Apple Silicon, MPS)
 - Python: 3.12 via `uv`
 - Repo: `assignment1-basics-main`
-- Last sync: 2026-06-25T17:32:12.852756+00:00
+- Last sync: 2026-06-26T05:11:28.079596+00:00
 
 ## §2.5 BPE Training
 
 | Run | Vocab | Input | Time | Merges | Longest token |
 |-----|-------|-------|------|--------|---------------|
 | `tinystories_10k` | 10,000 | `TinyStoriesV2-GPT4-train.txt` | 10.3 min | 9743 |  accomplishment |
-| `owt_32k` | 32,000 | `owt_train_2gb.txt` (Mac subset) | pending | — | — |
+| `owt_32k` | 32,000 | `owt_train_1gb.txt` (Mac subset) | 159.0 min | 31743 | ---------------------------------------------------------------- |
 
 ## §2.7 Tokenizer Experiments
 
-Results: `artifacts/bpe_experiments.json` (pending)
+Results: `artifacts/bpe_experiments.json` (present)
 
 ## §7.2 TinyStories LM Training
 

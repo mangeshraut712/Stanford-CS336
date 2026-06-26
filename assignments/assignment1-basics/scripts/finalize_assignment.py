@@ -80,7 +80,7 @@ def patch_writeup(m: dict) -> None:
         r'Same architecture and step count as TinyStories run; 32k OWT tokenizer\. OWT validation loss is \*\*higher\*\* than TinyStories at equal steps because the distribution is broader and more heterogeneous\.':
             _owt_section(owt_bpe, owt_train, ts_train),
         r'\| OpenWebText \| `owt_train\.txt` \| 32,000 \|':
-            '| OpenWebText | `owt_train_2gb.txt` (2GB Mac subset) | 32,000 |',
+            '| OpenWebText | `owt_train_1gb.txt` (1GB Mac subset) | 32,000 |',
     }
     for pattern, repl in replacements.items():
         text = re.sub(pattern, repl, text, count=1)
@@ -180,7 +180,7 @@ This log tracks all training runs and experiments for Assignment 1.
 | Run | Vocab | Input | Time | Merges | Longest token |
 |-----|-------|-------|------|--------|---------------|
 | `tinystories_10k` | 10,000 | `TinyStoriesV2-GPT4-train.txt` | {fmt_sec(ts_bpe.get('elapsed_sec'))} | {ts_bpe.get('num_merges', '—')} | {ts_bpe.get('longest_token_repr', '—')} |
-| `owt_32k` | 32,000 | `owt_train_2gb.txt` (Mac subset) | {fmt_sec(owt_bpe.get('elapsed_sec')) if owt_bpe else 'pending'} | {owt_bpe.get('num_merges', '—')} | {owt_bpe.get('longest_token_repr', '—')} |
+| `owt_32k` | 32,000 | `owt_train_1gb.txt` (Mac subset) | {fmt_sec(owt_bpe.get('elapsed_sec')) if owt_bpe else 'pending'} | {owt_bpe.get('num_merges', '—')} | {owt_bpe.get('longest_token_repr', '—')} |
 
 ## §2.7 Tokenizer Experiments
 

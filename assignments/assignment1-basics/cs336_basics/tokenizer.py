@@ -62,6 +62,31 @@ def _word_has_pair(word: tuple[bytes, ...], pair: tuple[bytes, bytes]) -> bool:
     return any((word[index], word[index + 1]) == pair for index in range(len(word) - 1))
 
 
+def _pairs_in_word(word: tuple[bytes, ...]) -> list[tuple[bytes, bytes]]:
+    return [(word[index], word[index + 1]) for index in range(len(word) - 1)]
+
+
+def _register_word(
+    pair_to_words: dict[tuple[bytes, bytes], set[tuple[bytes, ...]]],
+    word: tuple[bytes, ...],
+) -> None:
+    for pair in _pairs_in_word(word):
+        pair_to_words.setdefault(pair, set()).add(word)
+
+
+def _unregister_word(
+    pair_to_words: dict[tuple[bytes, bytes], set[tuple[bytes, ...]]],
+    word: tuple[bytes, ...],
+) -> None:
+    for pair in _pairs_in_word(word):
+        words = pair_to_words.get(pair)
+        if words is None:
+            continue
+        words.discard(word)
+        if not words:
+            del pair_to_words[pair]
+
+
 def _count_words_in_text(text: str, special_tokens: list[str]) -> Counter[tuple[bytes, ...]]:
     special_bytes = {token.encode("utf-8") for token in special_tokens}
     word_counts: Counter[tuple[bytes, ...]] = Counter()
@@ -96,12 +121,14 @@ def _pretokenize_file_parallel(input_path: str | os.PathLike, special_tokens: li
     ]
     if num_workers <= 1 or len(ranges) <= 1:
         merged: Counter[tuple[bytes, ...]] = Counter()
-        for args in ranges:
+        for i, args in enumerate(ranges):
+            print(f"pretokenize chunk {i + 1}/{len(ranges)}", flush=True)
             merged.update(_pretokenize_byte_range(args))
         return merged
     merged = Counter()
     with Pool(processes=num_workers) as pool:
-        for partial in pool.imap_unordered(_pretokenize_byte_range, ranges, chunksize=1):
+        for i, partial in enumerate(pool.imap_unordered(_pretokenize_byte_range, ranges, chunksize=1), 1):
+            print(f"pretokenize chunk {i}/{len(ranges)}", flush=True)
             merged.update(partial)
     return merged
 
@@ -113,29 +140,37 @@ def train_bpe(
     num_workers: int = 1,
 ) -> tuple[dict[int, bytes], list[tuple[bytes, bytes]]]:
     word_counts = _pretokenize_file_parallel(input_path, special_tokens, num_workers)
+    print(f"pretokenize done: {len(word_counts)} unique words", flush=True)
 
     pair_counts: Counter[tuple[bytes, bytes]] = Counter()
+    pair_to_words: dict[tuple[bytes, bytes], set[tuple[bytes, ...]]] = {}
     for word, count in word_counts.items():
         _add_word_pair_counts(pair_counts, word, count)
+        _register_word(pair_to_words, word)
 
     vocab: dict[int, bytes] = {i: bytes([i]) for i in range(256)}
     for token in special_tokens:
         vocab[len(vocab)] = token.encode("utf-8")
 
     merges: list[tuple[bytes, bytes]] = []
+    merge_target = vocab_size - len(vocab)
     while len(vocab) < vocab_size and pair_counts:
+        if len(merges) % 1000 == 0:
+            print(f"bpe merge {len(merges)}/{merge_target}", flush=True)
         best_pair = max(pair_counts, key=lambda pair: (pair_counts[pair], pair))
         new_token = best_pair[0] + best_pair[1]
         vocab[len(vocab)] = new_token
         merges.append(best_pair)
 
-        words_to_update = [word for word in word_counts if _word_has_pair(word, best_pair)]
+        words_to_update = list(pair_to_words.get(best_pair, ()))
         for word in words_to_update:
             count = word_counts.pop(word)
+            _unregister_word(pair_to_words, word)
             _remove_word_pair_counts(pair_counts, word, count)
             new_word = _merge_pair_in_word(word, best_pair)
             word_counts[new_word] += count
             _add_word_pair_counts(pair_counts, new_word, count)
+            _register_word(pair_to_words, new_word)
 
     return vocab, merges
 

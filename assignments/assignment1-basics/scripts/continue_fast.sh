@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Fast path A: full assignment with OWT 2GB subset + reduced steps (no long leaderboard).
+# Fast path A: OWT 1GB subset, serial BPE (stable on Mac), reduced training steps.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 ARTIFACTS="$ROOT/artifacts"
 DATA="$ROOT/data"
-OWT_SUBSET="$DATA/owt_train_2gb.txt"
-SUBSET_BYTES=$((2 * 1024 * 1024 * 1024))
+OWT_SUBSET="$DATA/owt_train_1gb.txt"
+SUBSET_BYTES=$((1 * 1024 * 1024 * 1024))
 
 log() { echo "[$(date '+%H:%M:%S')] $*"; }
 
@@ -38,21 +38,21 @@ run_train() {
   uv run python train.py --output-dir "$outdir" --run-name "$name" "$@"
 }
 
-log "=== Fast full pipeline (OWT 2GB subset) ==="
+log "=== Fast full pipeline (OWT 1GB subset) ==="
 
 if [[ ! -f "$OWT_SUBSET" ]]; then
-  log "Creating 2GB OWT train subset..."
+  log "Creating 1GB OWT train subset..."
   head -c "$SUBSET_BYTES" "$DATA/owt_train.txt" > "$OWT_SUBSET"
 fi
 
 if [[ ! -f "$ARTIFACTS/bpe/owt_32k/vocab.json" ]]; then
-  log "=== OWT BPE on 2GB subset ==="
+  log "=== OWT BPE on 1GB subset (serial pretoken) ==="
   uv run python scripts/train_bpe.py \
     --input "$OWT_SUBSET" \
     --output-dir "$ARTIFACTS/bpe/owt_32k" \
     --vocab-size 32000 \
-    --num-workers 2 \
-    --name owt_32k_2gb_subset
+    --num-workers 1 \
+    --name owt_32k_1gb_subset
 fi
 
 if [[ ! -f "$ARTIFACTS/experiments/tinystories_main/run_summary.json" ]]; then
@@ -61,7 +61,7 @@ if [[ ! -f "$ARTIFACTS/experiments/tinystories_main/run_summary.json" ]]; then
     --train-tokens "$ARTIFACTS/tokens/tinystories_train.bin" \
     --val-tokens "$ARTIFACTS/tokens/tinystories_valid.bin" \
     --tokenizer-dir "$ARTIFACTS/bpe/tinystories_10k" \
-    --batch-size 64 --max-steps 2500 --eval-every 1000 --eval-batches 15 \
+    --batch-size 32 --max-steps 2500 --eval-every 1000 --eval-batches 15 \
     --checkpoint-every 1250 --log-every 100
 fi
 
@@ -74,13 +74,13 @@ log "=== OWT tokenization ==="
 run_tokenize "$DATA/owt_valid.txt" "$ARTIFACTS/tokens/owt_valid.bin" "$ARTIFACTS/bpe/owt_32k"
 run_tokenize "$OWT_SUBSET" "$ARTIFACTS/tokens/owt_train.bin" "$ARTIFACTS/bpe/owt_32k"
 
-log "=== OWT fast training ==="
+log "=== OWT fast training (2000 steps, batch 32) ==="
 run_train owt_main \
   --train-tokens "$ARTIFACTS/tokens/owt_train.bin" \
   --val-tokens "$ARTIFACTS/tokens/owt_valid.bin" \
   --tokenizer-dir "$ARTIFACTS/bpe/owt_32k" \
-  --vocab-size 32000 --batch-size 32 --max-steps 2500 \
-  --eval-every 1000 --eval-batches 15 --checkpoint-every 1250 --log-every 100
+  --vocab-size 32000 --batch-size 32 --max-steps 2000 \
+  --eval-every 1000 --eval-batches 10 --checkpoint-every 1000 --log-every 100
 
 log "=== finalize assignment (pytest + writeup + zip) ==="
 bash "$ROOT/scripts/finalize_assignment.sh"

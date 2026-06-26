@@ -1,0 +1,9 @@
+{
+  "input": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/data/owt_valid.txt",
+  "output": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/artifacts/tokens/owt_valid.bin",
+  "num_tokens": 66432115,
+  "dtype": "uint16",
+  "elapsed_sec": 258.80767798423767,
+  "max_token_id": 31999,
+  "why_uint16": "vocab sizes up to 32k fit in uint16; halves storage vs int32/int64 for memmap training."
+}

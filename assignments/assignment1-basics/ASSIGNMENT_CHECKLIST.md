@@ -1,12 +1,12 @@
 # Assignment 1 Completion Checklist
 
-Updated: 2026-06-25T17:32:12.852756+00:00
+Updated: 2026-06-26T05:11:28.079596+00:00
 
 ## Code & tests
 - [x] `uv run pytest -q` — 47 passed, 1 xfail
 - [x] TinyStories BPE 10k (`artifacts/bpe/tinystories_10k/`)
-- [ ] OWT BPE 32k (`artifacts/bpe/owt_32k/`)
-- [ ] BPE experiments (`artifacts/bpe_experiments.json`)
+- [x] OWT BPE 32k (`artifacts/bpe/owt_32k/`)
+- [x] BPE experiments (`artifacts/bpe_experiments.json`)
 
 ## Training runs
 - [x] smoke_test
