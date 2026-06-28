@@ -3,7 +3,18 @@
 **Purpose:** Self-study / portfolio (learning project).  
 **Updated:** 2026-06-28
 
-## What this assignment is
+## Status: In progress
+
+| Item | Status |
+|------|--------|
+| Repo vendored into monorepo | Done |
+| `uv sync --extra server` | Done |
+| Isoflops analysis script | Done — `scripts/analyze_isoflops.py` |
+| API check / probe submit scripts | Done — needs `A3_API_KEY` |
+| Local pytest | Blocked until Postgres + `.env` |
+| Hosted API experiments | Not started (need student key + API access) |
+| Scaling-law fits from your runs | Not started |
+| Writeup | Not started |
 
 Unlike Assignments 1–2, **most code is staff-provided**. Your work is:
 
@@ -41,19 +52,4 @@ On Mac without Postgres, skip pytest; use the hosted API and notebook instead.
 | `data/isoflops_curves.json` | Reference isoflops data for analysis |
 | `cs336_assignment3_scaling.pdf` | Full handout |
 
-## Status
-
-| Item | Status |
-|------|--------|
-| Repo vendored into monorepo | Done |
-| `uv sync --extra server` | Done |
-| Local pytest | Blocked until Postgres + `.env` |
-| Hosted API experiments | Not started |
-| Scaling-law analysis / writeup | Not started |
-
-## Next steps
-
-1. Set `A3_API_KEY` and run through `examples/client_example.ipynb`
-2. Plan compute budget (12 GPU-hours default per user on API)
-3. Submit small runs; fit loss vs compute / params
-4. Draft writeup sections from handout
+## What this assignment is

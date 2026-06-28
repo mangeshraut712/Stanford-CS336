@@ -1,0 +1,47 @@
+[
+  {
+    "compute_budget": 6e+18,
+    "parameters": 762093419,
+    "final_loss": 5.899930270214304
+  },
+  {
+    "compute_budget": 1e+19,
+    "parameters": 806647749,
+    "final_loss": 5.617943423092358
+  },
+  {
+    "compute_budget": 3e+19,
+    "parameters": 1536852354,
+    "final_loss": 5.107176953205009
+  },
+  {
+    "compute_budget": 6e+19,
+    "parameters": 1952041776,
+    "final_loss": 4.830586005050577
+  },
+  {
+    "compute_budget": 1e+20,
+    "parameters": 3253402960,
+    "final_loss": 4.6528929644335255
+  },
+  {
+    "compute_budget": 3e+20,
+    "parameters": 5903836027,
+    "final_loss": 4.311218819265305
+  },
+  {
+    "compute_budget": 6e+20,
+    "parameters": 6971055968,
+    "final_loss": 4.121240846441071
+  },
+  {
+    "compute_budget": 1e+21,
+    "parameters": 6859328563,
+    "final_loss": 4.002834749948777
+  },
+  {
+    "compute_budget": 3e+21,
+    "parameters": 12148905329,
+    "final_loss": 3.773187514504335
+  }
+]
