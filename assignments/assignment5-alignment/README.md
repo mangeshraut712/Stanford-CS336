@@ -1,5 +1,7 @@
 # CS336 Spring 2026 Assignment 5: Alignment
 
+> **Portfolio status:** Complete (self-study). See [`PROJECT_STATUS.md`](./PROJECT_STATUS.md), [`SOLUTION.md`](./SOLUTION.md), [`LEARNINGS.md`](./LEARNINGS.md). Verify: `bash scripts/finalize_assignment.sh` → **26/26 tests**.
+
 For a full description of the assignment, see the assignment handout at
 [cs336_spring2026_assignment5_alignment.pdf](./cs336_spring2026_assignment5_alignment.pdf)
 
@@ -18,13 +20,12 @@ uv sync --no-install-package flash-attn
 uv sync
 ```
 
-2. Run the required unit tests:
+2. Run all unit tests:
 
 ``` sh
-uv run pytest tests/test_grpo.py
+bash scripts/finalize_assignment.sh
+# or: uv run pytest tests/
 ```
 
-Initially, all tests should fail with `NotImplementedError`s.
-To connect your implementation to the tests, complete the
-functions in [./tests/adapters.py](./tests/adapters.py).
+Implementation lives in [`cs336_alignment/grpo.py`](./cs336_alignment/grpo.py) and [`tests/adapters.py`](./tests/adapters.py).
 

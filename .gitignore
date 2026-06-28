@@ -2,13 +2,15 @@
 *.swp
 .idea/
 .vscode/
+.cursor/
 
-# Assignment stubs (local downloads, not committed)
+# Local download stubs (not part of monorepo)
 assignment*-main/
 lectures-main/
 
 # Large / generated
 *.zip
+*.bin
 
 # Python / tooling
 __pycache__/
@@ -28,6 +30,9 @@ logs/
 *.pt
 *.pth
 *.ckpt
+
+# A4 offline assets (download via scripts/download_data.py)
+**/local-shared-data/
 
 # Nested git repos from vendored assignments
 **/.git/

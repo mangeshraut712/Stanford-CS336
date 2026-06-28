@@ -16,8 +16,7 @@ This directory is organized as follows:
   implementation of the language model from assignment 1. You will use this training code
   to train an LM on your filtered data. You should not modify the training logic, since
   your leaderboard submission must use it exactly.
-- [`./cs336_data`](./cs336_data): This folder is basically empty! This is the
-  module where you will implement code to filter and process the data.
+- [`./cs336_data`](./cs336_data): Student implementation — extract, LID, PII, classifiers, Gopher rules, dedup (see [`SOLUTION.md`](./SOLUTION.md)).
 
 Visually, it should look something like:
 

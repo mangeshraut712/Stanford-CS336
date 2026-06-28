@@ -11,7 +11,7 @@ A complete **Group Relative Policy Optimization (GRPO)** training step on CPU-fr
 - Support on-policy and off-policy (importance sampling, token-level PPO clip, GSPO sequence clip).
 - Aggregate per-token losses with sequence-level or constant normalization; gradient accumulation and clipping.
 
-All **19 required** snapshot tests in `tests/test_grpo.py` pass on Mac without GPU.
+All **26** tests pass on Mac without GPU (19 GRPO + 7 supplement).
 
 ## Key design choices
 

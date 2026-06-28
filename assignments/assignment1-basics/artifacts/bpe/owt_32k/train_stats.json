@@ -1,6 +1,6 @@
 {
   "name": "owt_32k_1gb_subset",
-  "input": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/data/owt_train_1gb.txt",
+  "input": "data/owt_train_1gb.txt",
   "vocab_size": 32000,
   "num_merges": 31743,
   "elapsed_sec": 9542.838840961456,

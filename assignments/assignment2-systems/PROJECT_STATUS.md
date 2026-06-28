@@ -32,6 +32,10 @@ cs336_systems/
 tests/adapters.py               # wires tests → cs336_systems
 ```
 
+## Documentation
+
+- [`SOLUTION.md`](./SOLUTION.md), [`LEARNINGS.md`](./LEARNINGS.md), [`MONOREPO.md`](../../MONOREPO.md)
+
 ## Optional next steps
 
 1. Triton FA kernels on CUDA / Linux

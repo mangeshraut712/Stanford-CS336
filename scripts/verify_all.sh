@@ -8,6 +8,7 @@ echo "========== Assignment 1 =========="
 cd assignments/assignment1-basics
 uv sync -q
 uv run pytest -q
+bash scripts/verify_complete.sh
 echo "A1 OK"
 
 echo ""
@@ -20,13 +21,13 @@ echo "A2 OK"
 echo ""
 echo "========== Assignment 3 =========="
 cd "$ROOT/assignments/assignment3-scaling"
-bash scripts/verify_complete.sh
+bash scripts/finalize_assignment.sh
 echo "A3 OK"
 
 echo ""
 echo "========== Assignment 4 =========="
 cd "$ROOT/assignments/assignment4-data"
-bash scripts/verify_complete.sh
+bash scripts/finalize_assignment.sh
 echo "A4 OK"
 
 echo ""

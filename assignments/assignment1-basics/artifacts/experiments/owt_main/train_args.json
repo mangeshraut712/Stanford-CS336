@@ -1,8 +1,8 @@
 {
-  "train_tokens": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/artifacts/tokens/owt_train.bin",
-  "val_tokens": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/artifacts/tokens/owt_valid.bin",
-  "tokenizer_dir": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/artifacts/bpe/owt_32k",
-  "output_dir": "/Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics/artifacts/experiments/owt_main",
+  "train_tokens": "artifacts/tokens/owt_train.bin",
+  "val_tokens": "artifacts/tokens/owt_valid.bin",
+  "tokenizer_dir": "artifacts/bpe/owt_32k",
+  "output_dir": "artifacts/experiments/owt_main",
   "run_name": "owt_main",
   "device": "auto",
   "batch_size": 32,

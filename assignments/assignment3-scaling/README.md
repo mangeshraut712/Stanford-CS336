@@ -1,5 +1,7 @@
 # CS336 Spring 2026 Assignment 3: Scaling
 
+> **Portfolio status:** Complete (self-study). See [`PROJECT_STATUS.md`](./PROJECT_STATUS.md), [`SOLUTION.md`](./SOLUTION.md), [`LEARNINGS.md`](./LEARNINGS.md). Verify: `bash scripts/finalize_assignment.sh`.
+
 For a full description of the assignment, see the assignment handout at
 [cs336_assignment3_scaling.pdf](./cs336_assignment3_scaling.pdf).
 

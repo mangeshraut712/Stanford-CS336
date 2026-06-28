@@ -16,11 +16,7 @@ This directory is organized as follows:
   `cs336_basics` and its associated `pyproject.toml`. This module contains the staff 
   implementation of the language model from assignment 1. If you want to use your own 
   implementation, you can replace this directory with your own implementation.
-- [`./cs336_systems`](./cs336_systems): This folder is basically empty! This is the
-  module where you will implement your optimized Transformer language model. 
-  Feel free to take whatever code you need from assignment 1 (in `cs336-basics`) and copy it 
-  over as a starting point. In addition, you will implement distributed training and
-  optimization in this module.
+- [`./cs336_systems`](./cs336_systems): Student implementation — flash attention, DDP, FSDP, and sharded AdamW (see [`SOLUTION.md`](./SOLUTION.md)).
 
 Visually, it should look something like:
 

@@ -1,8 +1,8 @@
 {
-  "train_tokens": "/Users/mangeshraut/Downloads/Standford_CS336/assignment1-basics-main/artifacts/tokens/tinystories_train.bin",
-  "val_tokens": "/Users/mangeshraut/Downloads/Standford_CS336/assignment1-basics-main/artifacts/tokens/tinystories_valid.bin",
-  "tokenizer_dir": "/Users/mangeshraut/Downloads/Standford_CS336/assignment1-basics-main/artifacts/bpe/tinystories_10k",
-  "output_dir": "/Users/mangeshraut/Downloads/Standford_CS336/assignment1-basics-main/artifacts/experiments/tinystories_main",
+  "train_tokens": "artifacts/tokens/tinystories_train.bin",
+  "val_tokens": "artifacts/tokens/tinystories_valid.bin",
+  "tokenizer_dir": "artifacts/bpe/tinystories_10k",
+  "output_dir": "artifacts/experiments/tinystories_main",
   "run_name": "tinystories_main",
   "device": "auto",
   "batch_size": 32,

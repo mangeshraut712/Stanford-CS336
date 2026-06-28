@@ -11,7 +11,7 @@ This monorepo documents learning-by-building: implement each assignment from scr
 
 | Assignment | Topic | Status | Verify |
 |------------|-------|--------|--------|
-| [1 — Basics](assignments/assignment1-basics/) | BPE, transformer, training | **Complete** | `uv run pytest -q` |
+| [1 — Basics](assignments/assignment1-basics/) | BPE, transformer, training | **Complete** | `pytest` + `scripts/verify_complete.sh` |
 | [2 — Systems](assignments/assignment2-systems/) | Flash attention, DDP, FSDP | **Complete** | `uv run pytest -q` |
 | [3 — Scaling](assignments/assignment3-scaling/) | Isoflops, scaling laws | **Complete** (self-study) | `bash scripts/finalize_assignment.sh` |
 | [4 — Data](assignments/assignment4-data/) | Filtering, dedup, classifiers | **Complete** (self-study) | `bash scripts/finalize_assignment.sh` |
@@ -22,6 +22,8 @@ This monorepo documents learning-by-building: implement each assignment from scr
 ```bash
 bash scripts/verify_all.sh
 ```
+
+See [`MONOREPO.md`](MONOREPO.md) for per-assignment layout and doc conventions.
 
 ## Design principles
 

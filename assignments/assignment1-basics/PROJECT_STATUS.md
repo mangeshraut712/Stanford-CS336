@@ -1,7 +1,7 @@
 # Assignment 1 — Project Status
 
 **Purpose:** Self-study / portfolio project (not a Gradescope submission).  
-Updated: 2026-06-26T06:31:15.885064+00:00
+**Updated:** 2026-06-28
 
 ## Code & tests
 - [x] `uv run pytest -q` — 47 passed, 1 xfail
@@ -21,10 +21,10 @@ Updated: 2026-06-26T06:31:15.885064+00:00
 
 ## Refresh docs after new runs
 ```bash
-cd /Users/mangeshraut/Downloads/Standford_CS336/assignments/assignment1-basics
+cd assignments/assignment1-basics
 bash scripts/finalize_assignment.sh
 ```
 
-## Next
+## Portfolio
 
-Assignments 2–3 complete. See repo root [`README.md`](../../README.md) and [`PROJECT_PURPOSE.md`](../../PROJECT_PURPOSE.md).
+Assignments 1–5 complete. See repo root [`README.md`](../../README.md), [`MONOREPO.md`](../../MONOREPO.md), and [`PROJECT_PURPOSE.md`](../../PROJECT_PURPOSE.md).
