@@ -9,11 +9,10 @@
 |------|--------|
 | Repo vendored into monorepo | Done |
 | `uv sync --extra server` | Done |
-| Isoflops analysis script | Done — `scripts/analyze_isoflops.py` |
-| API check / probe submit scripts | Done — needs `A3_API_KEY` |
-| Local pytest | Blocked until Postgres + `.env` |
-| Hosted API experiments | Not started (need student key + API access) |
-| Scaling-law fits from your runs | Not started |
+| Local pytest (PostgreSQL) | **7/7 pass** |
+| Isoflops + scaling-law fits | Done |
+| API check / probe submit | Optional — needs enrolled `A3_API_KEY` |
+| Hosted GPU experiments | Optional — enrollment only |
 | Writeup | Not started |
 
 Unlike Assignments 1–2, **most code is staff-provided**. Your work is:
@@ -23,25 +22,18 @@ Unlike Assignments 1–2, **most code is staff-provided**. Your work is:
 3. **Predict final loss** for a large validation run and submit via `save_final_submission()`
 4. **Writeup** — math and analysis (see `cs336_assignment3_scaling.pdf`)
 
-## Setup
+## Local workflow (recommended for self-study)
 
 ```bash
-cd assignments/assignment3-scaling
+brew services start postgresql@15
+cp .env.example .env
 uv sync --extra server
-cp .env.example .env   # edit A3_API_KEY if using hosted API
-export A3_API_KEY=06123456   # 8-digit key for hyperturing API
+uv run pytest -q
+uv run python scripts/analyze_isoflops.py
+uv run python scripts/fit_scaling_laws.py
 ```
 
-## Local tests (optional — staff server code)
-
-Requires **PostgreSQL** running locally (`pg_isready`).
-
-```bash
-export INTERNAL_API_KEY=local-dev-internal-key
-uv run pytest -q   # 7 tests — API + scheduler
-```
-
-On Mac without Postgres, skip pytest; use the hosted API and notebook instead.
+See `GOALS.md` for assignment goal and when you need `A3_API_KEY`.
 
 ## Key files
 

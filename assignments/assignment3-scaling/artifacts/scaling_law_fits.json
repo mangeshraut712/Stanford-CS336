@@ -1,0 +1,17 @@
+{
+  "compute_optimal_N_vs_C": {
+    "formula": "N_opt \u2248 a * C^b",
+    "a": 1.163410636419929,
+    "b": 0.46868266774370076,
+    "chinchilla_expected_b": 0.5
+  },
+  "compute_optimal_L_vs_C": {
+    "formula": "L_opt \u2248 c * C^d",
+    "c": 131.81201058311387,
+    "d": -0.07230660587355069
+  },
+  "notes": [
+    "Fitted on staff reference isoflops compute-optimal points.",
+    "Use your own API runs to refit before final submission prediction."
+  ]
+}

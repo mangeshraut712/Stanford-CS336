@@ -23,7 +23,7 @@ def training_config(
             intermediate_size=hidden_size * 4,
             num_attention_heads=hidden_size,
             num_hidden_layers=1,
-            num_key_value_heads=1,
+            num_key_value_heads=hidden_size,
             rms_norm_eps=1e-6,
             rope_theta=10_000,
             tie_word_embeddings=False,
