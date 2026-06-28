@@ -13,7 +13,7 @@ See [`PROJECT_PURPOSE.md`](PROJECT_PURPOSE.md) for goals, layout, and verificati
 | 2 | [Systems](https://github.com/stanford-cs336/assignment2-systems) | [`assignments/assignment2-systems/`](assignments/assignment2-systems/) | **Complete** — 10 passed, 4 skipped (Mac) |
 | 3 | [Scaling](https://github.com/stanford-cs336/assignment3-scaling) | [`assignments/assignment3-scaling/`](assignments/assignment3-scaling/) | **Complete** — scaling fits, prediction L≈7.17 |
 | 4 | [Data](https://github.com/stanford-cs336/assignment4-data) | [`assignments/assignment4-data/`](assignments/assignment4-data/) | **Complete** — 21/21 tests, data pipeline |
-| 5 | [Alignment](https://github.com/stanford-cs336/assignment5-alignment) | — | Not started |
+| 5 | [Alignment](https://github.com/stanford-cs336/assignment5-alignment) | [`assignments/assignment5-alignment/`](assignments/assignment5-alignment/) | **Complete** — 19/19 GRPO tests |
 
 ## Verify all completed work
 
@@ -60,6 +60,17 @@ bash scripts/finalize_assignment.sh
 - 21/21 pytest · HTML extract, LID, PII, classifiers, Gopher, dedup
 - Docs: `writeup.md`, `SOLUTION.md`, `GOALS.md`
 - Offline assets: `uv run python scripts/download_data.py --offline-only` (~2GB, first run)
+
+## Assignment 5
+
+```bash
+cd assignments/assignment5-alignment
+bash scripts/finalize_assignment.sh
+```
+
+- 19/19 GRPO pytest · tokenization, advantages, PPO/GSPO clip, train step
+- Optional: SFT packing, MMLU/GSM8K parsers (pass); DPO optional test pending snapshot alignment
+- Docs: `writeup.md`, `SOLUTION.md`, `GOALS.md`
 
 ## What belongs on GitHub
 
