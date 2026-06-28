@@ -8,6 +8,7 @@ See root [`PROJECT_PURPOSE.md`](../PROJECT_PURPOSE.md) and [`scripts/verify_all.
 | [`assignment1-basics/`](assignment1-basics/) | Tokenizer, transformer, training | **Complete** |
 | [`assignment2-systems/`](assignment2-systems/) | Flash attention, DDP, FSDP | **Complete** |
 | [`assignment3-scaling/`](assignment3-scaling/) | Scaling laws, training API | **Complete** (self-study) |
+| [`assignment4-data/`](assignment4-data/) | Data filtering, deduplication | **Complete** (self-study) |
 
 Each assignment is a standalone `uv` project with its own `pyproject.toml` and tests.
 

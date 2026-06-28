@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Verify Assignments 1–3 across the monorepo.
+# Verify Assignments 1–4 across the monorepo.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -24,4 +24,10 @@ bash scripts/verify_complete.sh
 echo "A3 OK"
 
 echo ""
-echo "All assignments 1–3 verified."
+echo "========== Assignment 4 =========="
+cd "$ROOT/assignments/assignment4-data"
+bash scripts/verify_complete.sh
+echo "A4 OK"
+
+echo ""
+echo "All assignments 1–4 verified."

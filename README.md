@@ -12,7 +12,7 @@ See [`PROJECT_PURPOSE.md`](PROJECT_PURPOSE.md) for goals, layout, and verificati
 | 1 | [Basics](https://github.com/stanford-cs336/assignment1-basics) | [`assignments/assignment1-basics/`](assignments/assignment1-basics/) | **Complete** — TS val 2.07, OWT val 5.38 |
 | 2 | [Systems](https://github.com/stanford-cs336/assignment2-systems) | [`assignments/assignment2-systems/`](assignments/assignment2-systems/) | **Complete** — 10 passed, 4 skipped (Mac) |
 | 3 | [Scaling](https://github.com/stanford-cs336/assignment3-scaling) | [`assignments/assignment3-scaling/`](assignments/assignment3-scaling/) | **Complete** — scaling fits, prediction L≈7.17 |
-| 4 | [Data](https://github.com/stanford-cs336/assignment4-data) | — | Not started |
+| 4 | [Data](https://github.com/stanford-cs336/assignment4-data) | [`assignments/assignment4-data/`](assignments/assignment4-data/) | **Complete** — 21/21 tests, data pipeline |
 | 5 | [Alignment](https://github.com/stanford-cs336/assignment5-alignment) | — | Not started |
 
 ## Verify all completed work
@@ -49,6 +49,17 @@ bash scripts/finalize_assignment.sh
 
 - 7/7 pytest · isoflops analysis · Chinchilla-style fits · predicted loss 7.169
 - Docs: `writeup.md`, `SOLUTION.md`, `GOALS.md`
+
+## Assignment 4
+
+```bash
+cd assignments/assignment4-data
+bash scripts/finalize_assignment.sh
+```
+
+- 21/21 pytest · HTML extract, LID, PII, classifiers, Gopher, dedup
+- Docs: `writeup.md`, `SOLUTION.md`, `GOALS.md`
+- Offline assets: `uv run python scripts/download_data.py --offline-only` (~2GB, first run)
 
 ## What belongs on GitHub
 
