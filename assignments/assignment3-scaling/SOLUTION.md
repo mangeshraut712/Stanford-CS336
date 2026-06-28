@@ -1,28 +1,31 @@
-# CS336 Assignment 3 — Our Solution (WIP)
+# CS336 Assignment 3 — Our Solution
 
-**Author:** Mangesh Raut  
-**Course:** Stanford CS336 — Language Modeling from Scratch (self-study)  
-**Base repo:** [stanford-cs336/assignment3-scaling](https://github.com/stanford-cs336/assignment3-scaling)
+**Author:** Mangesh Raut · **Course:** Stanford CS336 (self-study)
 
-This assignment uses the **hosted training API** and scaling-law analysis rather than implementing new model code.
+## Completed (self-study track)
 
----
+| Deliverable | Status | Location |
+|-------------|--------|----------|
+| Isoflops analysis | Done | `artifacts/isoflops_compute_optimal.json` |
+| Scaling-law fits | Done | `artifacts/scaling_law_fits.json` |
+| Parabola fits + prediction | Done | `artifacts/final_submission_prediction.json` |
+| Local pytest | **7/7** | PostgreSQL + `.env` |
+| Writeup | Done | `writeup.md` |
+| Hosted GPU runs | Optional | Needs `A3_API_KEY` |
 
-## Deliverables (from handout)
-
-- Training runs submitted through `cs336_scaling/client.py`
-- Scaling-law fits and compute-optimal predictions
-- Final loss prediction + `save_final_submission()` for the large validation run
-- PDF writeup with derivations and plots
-
----
-
-## How to work
+## Reproduce
 
 ```bash
 cd assignments/assignment3-scaling
-export A3_API_KEY=06123456   # your 8-digit key
-uv run jupyter notebook examples/client_example.ipynb
+bash scripts/finalize_assignment.sh
 ```
 
-See `PROJECT_STATUS.md` for local test setup and progress.
+## Key results
+
+- \(N^* \propto C^{0.469}\) (Chinchilla ≈ 0.5)
+- Default config predicted loss: **7.169**
+
+## Code added
+
+- `cs336_scaling/analysis/scaling.py` — fits and prediction
+- `scripts/run_analysis.py`, `predict_final_submission.py`, `verify_complete.sh`

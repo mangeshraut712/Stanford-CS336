@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="480">
+<rect width="720" height="480" fill="#fafafa"/>
+<text x="360" y="24" text-anchor="middle" font-size="14" font-family="sans-serif">IsoFLOPs: final loss vs parameters</text>
+<path d="M 60.0,60.0 L 95.8,95.4 L 131.7,124.6 L 167.5,147.0 L 203.4,162.3 L 239.2,170.2 L 275.0,170.6 L 310.9,163.2" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+<path d="M 100.3,110.1 L 136.2,141.0 L 172.0,165.6 L 207.8,183.4 L 243.7,194.3 L 279.5,197.9 L 315.4,194.2 L 351.2,183.2" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+<path d="M 187.0,203.7 L 222.9,225.1 L 258.7,240.2 L 294.6,248.9 L 330.4,251.1 L 366.2,246.5 L 402.1,235.3 L 437.9,217.5" fill="none" stroke="#16a34a" stroke-width="1.5"/>
+<path d="M 241.8,253.0 L 277.6,268.8 L 313.4,278.5 L 349.3,282.1 L 385.1,279.5 L 421.0,270.6 L 456.8,255.5 L 492.6,234.2" fill="none" stroke="#9333ea" stroke-width="1.5"/>
+<path d="M 282.1,284.9 L 317.9,296.8 L 353.8,302.9 L 389.6,303.1 L 425.4,297.3 L 461.3,285.6 L 497.1,268.0 L 533.0,244.5" fill="none" stroke="#ea580c" stroke-width="1.5"/>
+<path d="M 187.0,240.4 L 228.6,274.7 L 270.2,302.5 L 311.8,323.7 L 353.4,338.0 L 395.0,345.3 L 436.6,345.6 L 478.2,338.8" fill="none" stroke="#0891b2" stroke-width="1.5"/>
+<path d="M 241.8,293.3 L 283.4,321.5 L 325.0,343.4 L 366.6,359.0 L 408.2,368.1 L 449.8,370.8 L 491.4,366.8 L 533.0,356.2" fill="none" stroke="#4f46e5" stroke-width="1.5"/>
+<path d="M 282.1,327.6 L 323.7,351.5 L 365.3,369.4 L 406.9,381.3 L 448.5,387.0 L 490.1,386.6 L 531.7,379.9 L 573.3,366.9" fill="none" stroke="#be123c" stroke-width="1.5"/>
+<path d="M 368.8,389.0 L 410.4,404.7 L 452.0,415.0 L 493.6,420.0 L 535.2,419.5 L 576.8,413.6 L 618.4,402.1 L 660.0,385.0" fill="none" stroke="#65a30d" stroke-width="1.5"/>
+<circle cx="275.0" cy="170.6" r="4" fill="#000"/>
+<circle cx="279.5" cy="197.9" r="4" fill="#000"/>
+<circle cx="330.4" cy="251.1" r="4" fill="#000"/>
+<circle cx="349.3" cy="282.1" r="4" fill="#000"/>
+<circle cx="389.6" cy="303.1" r="4" fill="#000"/>
+<circle cx="436.6" cy="345.6" r="4" fill="#000"/>
+<circle cx="449.8" cy="370.8" r="4" fill="#000"/>
+<circle cx="448.5" cy="387.0" r="4" fill="#000"/>
+<circle cx="493.6" cy="420.0" r="4" fill="#000"/>
+</svg>

@@ -39,7 +39,7 @@ We train two tokenizers:
 
 ### 2.7 Experiments
 
-**(a) Compression ratio (bytes / token)** — sample 10 documents from each corpus, encode with both tokenizers. Results pending in `artifacts/bpe_experiments.json` (runs after OWT BPE completes).
+**(a) Compression ratio (bytes / token)** — sample 10 documents from each corpus, encode with both tokenizers. Results in `artifacts/bpe_experiments.json`.
 
 **(b) OWT with TinyStories tokenizer:** OWT is more diverse (news, forums, code snippets). The 10k TinyStories tokenizer achieves **lower compression** (more bytes per token) on OWT than the 32k OWT-trained tokenizer, because its merge table is tuned to simple children's prose.
 
@@ -100,7 +100,7 @@ All runs write `train_args.json`, `run_summary.json`, and checkpoints under `art
 
 ### 5.3 OpenWebText (§7.4)
 
-Same architecture; 32k OWT tokenizer on **2GB train subset** (Mac fast path). Training pending. OWT val loss expected **higher** than TinyStories (2.0679) at equal steps.
+Same architecture; 32k OWT tokenizer on **1GB train subset** (Mac fast path). **`owt_main`**: 2000 steps, batch 32 → **val loss 5.3765** (~7.7 hr wall-clock), as expected higher than TinyStories (2.0679).
 
 ### 5.4 Leaderboard modification (§7.5)
 

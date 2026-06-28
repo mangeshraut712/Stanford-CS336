@@ -172,7 +172,7 @@ This log tracks all training runs and experiments for Assignment 1.
 
 - Machine: MacBook Pro (Apple Silicon, MPS)
 - Python: 3.12 via `uv`
-- Repo: `assignment1-basics-main`
+- Repo: `assignments/assignment1-basics` (Stanford-CS336 monorepo)
 - Last sync: {m['updated']}
 
 ## §2.5 BPE Training

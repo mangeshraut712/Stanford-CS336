@@ -28,8 +28,8 @@
 |-----------|---------|
 | TinyStories BPE | 10k vocab, ~10 min |
 | TinyStories train | 2500 steps, batch 32, val loss **2.07** |
-| OWT BPE | 32k vocab, **2GB subset** (full 11GB too slow on Mac) |
-| OWT train | 2500 steps (pending) |
+| OWT BPE | 32k vocab, **1GB subset** (full 11GB too slow on Mac) |
+| OWT train | 2000 steps, val loss **5.38** |
 | Leaderboard | Skipped (optional) |
 
 Full metrics: `artifacts/experiment_log.md`, `writeup.md` §9.

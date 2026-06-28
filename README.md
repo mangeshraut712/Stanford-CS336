@@ -1,72 +1,61 @@
 # Stanford CS336 — Language Modeling from Scratch
 
-Self-study / portfolio implementations for [Stanford CS336](https://cs336.stanford.edu/spring2025/).  
-**Not** enrolled for course credit — learning and building in public on GitHub.
-
+Self-study portfolio for [Stanford CS336](https://cs336.stanford.edu/).  
 **Author:** [Mangesh Raut](https://github.com/mangeshraut712) · **Repo:** https://github.com/mangeshraut712/Stanford-CS336
+
+See [`PROJECT_PURPOSE.md`](PROJECT_PURPOSE.md) for goals, layout, and verification.
 
 ## Assignments
 
 | # | Name | Path | Status |
 |---|------|------|--------|
 | 1 | [Basics](https://github.com/stanford-cs336/assignment1-basics) | [`assignments/assignment1-basics/`](assignments/assignment1-basics/) | **Complete** — TS val 2.07, OWT val 5.38 |
-| 2 | [Systems](https://github.com/stanford-cs336/assignment2-systems) | [`assignments/assignment2-systems/`](assignments/assignment2-systems/) | **Complete** — 10/10 tests pass on Mac |
-| 3 | [Scaling](https://github.com/stanford-cs336/assignment3-scaling) | [`assignments/assignment3-scaling/`](assignments/assignment3-scaling/) | **In progress** — isoflops analysis started |
+| 2 | [Systems](https://github.com/stanford-cs336/assignment2-systems) | [`assignments/assignment2-systems/`](assignments/assignment2-systems/) | **Complete** — 10 passed, 4 skipped (Mac) |
+| 3 | [Scaling](https://github.com/stanford-cs336/assignment3-scaling) | [`assignments/assignment3-scaling/`](assignments/assignment3-scaling/) | **Complete** — scaling fits, prediction L≈7.17 |
 | 4 | [Data](https://github.com/stanford-cs336/assignment4-data) | — | Not started |
 | 5 | [Alignment](https://github.com/stanford-cs336/assignment5-alignment) | — | Not started |
 
-## Assignment 1 (done)
+## Verify all completed work
 
 ```bash
-cd assignments/assignment1-basics
-uv run pytest -q
+bash scripts/verify_all.sh
 ```
 
-- All unit tests pass (47 + 1 intentional xfail)
-- TinyStories + OWT pipelines run on Mac (fast path)
+## Assignment 1
+
+```bash
+cd assignments/assignment1-basics && uv run pytest -q
+```
+
+- 47 passed, 1 xfail · TinyStories + OWT training on Mac
 - Docs: `writeup.md`, `writeup.pdf`, `SOLUTION.md`, `LEARNINGS.md`
-- **No submission zips** — source and small artifacts live in git
 
-See [`assignments/assignment1-basics/PROJECT_STATUS.md`](assignments/assignment1-basics/PROJECT_STATUS.md).
-
-## Assignment 2 (done)
+## Assignment 2
 
 ```bash
-cd assignments/assignment2-systems
-uv run pytest -q
+cd assignments/assignment2-systems && uv run pytest -q
 ```
 
-- 10 passed, 4 skipped (Triton/CUDA on Mac)
 - Flash Attention (PyTorch), DDP, FSDP, Sharded AdamW
-- Docs: `SOLUTION.md`, `LEARNINGS.md`, `PROJECT_STATUS.md`
+- Docs: `SOLUTION.md`, `LEARNINGS.md`, `MONOREPO.md`
 
-See [`assignments/assignment2-systems/PROJECT_STATUS.md`](assignments/assignment2-systems/PROJECT_STATUS.md).
-
-## Assignment 3 (in progress)
+## Assignment 3
 
 ```bash
 cd assignments/assignment3-scaling
-uv sync --extra server
-uv run python scripts/analyze_isoflops.py   # local — no API needed
-export A3_API_KEY=06123456                # for hosted experiments
-uv run python scripts/check_api.py
+brew services start postgresql@15   # once
+bash scripts/finalize_assignment.sh
 ```
 
-- Staff API + JAX stack; your work = experiments, scaling fits, writeup
-- Started: isoflops compute-optimal analysis (`artifacts/isoflops_compute_optimal.json`)
-
-See [`assignments/assignment3-scaling/PROJECT_STATUS.md`](assignments/assignment3-scaling/PROJECT_STATUS.md).
-
-## Assignment 4+ (not started)
+- 7/7 pytest · isoflops analysis · Chinchilla-style fits · predicted loss 7.169
+- Docs: `writeup.md`, `SOLUTION.md`, `GOALS.md`
 
 ## What belongs on GitHub
 
 | Track in git | Keep local only |
 |--------------|-----------------|
-| Source (`cs336_basics/`, `train.py`, `tests/`, `scripts/`) | `data/` corpora |
-| Docs (`writeup.md`, `writeup.pdf`, `SOLUTION.md`, …) | Token `.bin` memmaps |
-| Small artifacts (BPE JSON, `run_summary.json`, `*.meta.json`) | Model checkpoints (`.pt`) |
-| | `.venv/`, `*.zip`, pipeline logs |
+| Source, tests, scripts | `data/` corpora, token `.bin` memmaps |
+| Docs + small artifacts | Model checkpoints, `.venv/`, `*.zip` |
 
 ## Course links
 

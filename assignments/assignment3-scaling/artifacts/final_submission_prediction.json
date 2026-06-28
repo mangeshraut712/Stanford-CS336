@@ -1,0 +1,12 @@
+{
+  "training_config_summary": {
+    "hidden_size": 448,
+    "num_hidden_layers": 9,
+    "total_train_tokens": 1048576,
+    "model_seed": 0
+  },
+  "estimated_params": 51389888,
+  "estimated_compute_flops": 323317219196928.0,
+  "predicted_final_loss": 7.169,
+  "note": "Self-study prediction from reference isoflops; refit after API runs if enrolled."
+}

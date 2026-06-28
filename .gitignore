@@ -7,6 +7,27 @@
 assignment*-main/
 lectures-main/
 
-# Large / generated (keep out of monorepo root)
+# Large / generated
 *.zip
-.DS_Store
+
+# Python / tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+*.egg-info/
+
+# Secrets & logs
+.env
+logs/
+*.log
+
+# ML artifacts (keep local)
+*.pt
+*.pth
+*.ckpt
+
+# Nested git repos from vendored assignments
+**/.git/

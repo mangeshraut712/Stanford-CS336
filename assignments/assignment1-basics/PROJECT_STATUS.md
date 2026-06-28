@@ -26,4 +26,5 @@ bash scripts/finalize_assignment.sh
 ```
 
 ## Next
-Assignment 2 (Systems): [`../assignment2-systems/`](../assignment2-systems/) — see repo root README.
+
+Assignments 2–3 complete. See repo root [`README.md`](../../README.md) and [`PROJECT_PURPOSE.md`](../../PROJECT_PURPOSE.md).

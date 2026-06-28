@@ -1,5 +1,7 @@
 # CS336 Spring 2026 Assignment 2: Systems
 
+> **Portfolio status:** Complete (self-study). See [`PROJECT_STATUS.md`](./PROJECT_STATUS.md), [`SOLUTION.md`](./SOLUTION.md), and [`MONOREPO.md`](./MONOREPO.md). Tests: `uv run pytest -q` → 10 passed, 4 skipped on Mac.
+
 For a full description of the assignment, see the assignment handout at
 [cs336_assignment2_systems.pdf](./cs336_assignment2_systems.pdf)
 
