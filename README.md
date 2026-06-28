@@ -11,7 +11,7 @@ Self-study / portfolio implementations for [Stanford CS336](https://cs336.stanfo
 |---|------|------|--------|
 | 1 | [Basics](https://github.com/stanford-cs336/assignment1-basics) | [`assignments/assignment1-basics/`](assignments/assignment1-basics/) | **Complete** — TS val 2.07, OWT val 5.38 |
 | 2 | [Systems](https://github.com/stanford-cs336/assignment2-systems) | [`assignments/assignment2-systems/`](assignments/assignment2-systems/) | **Complete** — 10/10 tests pass on Mac |
-| 3 | [Scaling](https://github.com/stanford-cs336/assignment3-scaling) | — | Not started |
+| 3 | [Scaling](https://github.com/stanford-cs336/assignment3-scaling) | [`assignments/assignment3-scaling/`](assignments/assignment3-scaling/) | **Scaffolded** — API experiments + writeup |
 | 4 | [Data](https://github.com/stanford-cs336/assignment4-data) | — | Not started |
 | 5 | [Alignment](https://github.com/stanford-cs336/assignment5-alignment) | — | Not started |
 
@@ -42,7 +42,21 @@ uv run pytest -q
 
 See [`assignments/assignment2-systems/PROJECT_STATUS.md`](assignments/assignment2-systems/PROJECT_STATUS.md).
 
-## Assignment 3+ (not started)
+## Assignment 3 (scaffolded)
+
+```bash
+cd assignments/assignment3-scaling
+uv sync --extra server
+export A3_API_KEY=06123456   # 8-digit key for hosted API
+```
+
+- Staff-provided API client + JAX training stack
+- **Your work:** submit runs on [hyperturing](http://hyperturing.stanford.edu:8000), fit scaling laws, writeup
+- Start with `examples/client_example.ipynb`
+
+See [`assignments/assignment3-scaling/PROJECT_STATUS.md`](assignments/assignment3-scaling/PROJECT_STATUS.md).
+
+## Assignment 4+ (not started)
 
 ## What belongs on GitHub
 
