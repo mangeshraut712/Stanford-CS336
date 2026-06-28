@@ -15,7 +15,7 @@ This monorepo documents learning-by-building: implement each assignment from scr
 | [2 — Systems](assignments/assignment2-systems/) | Flash attention, DDP, FSDP | **Complete** | `uv run pytest -q` |
 | [3 — Scaling](assignments/assignment3-scaling/) | Isoflops, scaling laws | **Complete** (self-study) | `bash scripts/finalize_assignment.sh` |
 | [4 — Data](assignments/assignment4-data/) | Filtering, dedup, classifiers | **Complete** (self-study) | `bash scripts/finalize_assignment.sh` |
-| [5 — Alignment](assignments/assignment5-alignment/) | GRPO, optional SFT/DPO | **Complete** (required tests) | `bash scripts/finalize_assignment.sh` |
+| [5 — Alignment](assignments/assignment5-alignment/) | GRPO, SFT, DPO, eval parsers | **Complete** (self-study) | `bash scripts/finalize_assignment.sh` |
 
 ## Cross-check entire repo
 

@@ -9,6 +9,7 @@ See root [`PROJECT_PURPOSE.md`](../PROJECT_PURPOSE.md) and [`scripts/verify_all.
 | [`assignment2-systems/`](assignment2-systems/) | Flash attention, DDP, FSDP | **Complete** |
 | [`assignment3-scaling/`](assignment3-scaling/) | Scaling laws, training API | **Complete** (self-study) |
 | [`assignment4-data/`](assignment4-data/) | Data filtering, deduplication | **Complete** (self-study) |
+| [`assignment5-alignment/`](assignment5-alignment/) | GRPO, SFT, DPO, eval parsers | **Complete** (self-study) |
 
 Each assignment is a standalone `uv` project with its own `pyproject.toml` and tests.
 

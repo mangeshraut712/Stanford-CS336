@@ -22,7 +22,7 @@ Implement **alignment / reasoning RL** with GRPO on GSM8K-style math rollouts, p
 |-----------|-------|
 | Packed SFT dataset + batch iterator | `tests/test_data.py` — pass |
 | MMLU / GSM8K parsers | `tests/test_metrics.py` — pass |
-| Per-instance DPO loss | `tests/test_dpo.py` — snapshot value mismatch under current deps (optional) |
+| Per-instance DPO loss | `tests/test_dpo.py` — pass |
 
 ## Local workflow
 

@@ -24,4 +24,4 @@
 
 - **SFT packing** — Alpaca-style template + EOS between examples; chunk into `seq_length` with global shifted labels.
 - **Parsers** — MMLU: regex for A–D; GSM8K: last number in output.
-- **DPO** — Standard `-log σ(β((log π_θ(y_w|x) - log π_θ(y_l|x)) - (log π_ref(y_w|x) - log π_ref(y_l|x))))` with response-token log-prob sum.
+- **DPO** — Alpaca template (`prompts_safety/alpaca_sft.prompt`) + EOS; sum log-probs over full formatted sequence; standard DPO sigmoid loss.

@@ -11,6 +11,12 @@ from torch import Tensor
 from torch.utils.data import DataLoader, Dataset
 from transformers import PreTrainedTokenizerBase
 
+_ALPACA_SFT_PROMPT_PATH = Path(__file__).parent / "prompts_safety" / "alpaca_sft.prompt"
+
+
+def _load_alpaca_sft_template() -> str:
+    return _ALPACA_SFT_PROMPT_PATH.read_text()
+
 
 def tokenize_prompt_and_output(
     prompt_strs: list[str],
@@ -378,25 +384,20 @@ def parse_gsm8k_response(model_output: str) -> str | None:
     return matches[-1]
 
 
-def _response_log_prob_sum(
+def _sequence_log_prob_sum(
     model: torch.nn.Module,
-    prompt: str,
-    response: str,
     tokenizer: PreTrainedTokenizerBase,
+    instruction: str,
+    response: str,
 ) -> Tensor:
-    prompt_ids = tokenizer.encode(prompt, add_special_tokens=False)
-    full_ids = prompt_ids + tokenizer.encode(response, add_special_tokens=False)
-    input_ids = torch.tensor([full_ids[:-1]])
-    labels = torch.tensor([full_ids[1:]])
+    template = _load_alpaca_sft_template()
+    text = template.format(instruction=instruction, response=response)
+    token_ids = tokenizer.encode(text, add_special_tokens=False) + [tokenizer.eos_token_id]
+    input_ids = torch.tensor([token_ids[:-1]], device=next(model.parameters()).device)
+    labels = torch.tensor([token_ids[1:]], device=input_ids.device)
     logits = model(input_ids).logits
-    token_nll = F.cross_entropy(
-        logits.reshape(-1, logits.size(-1)),
-        labels.reshape(-1),
-        reduction="none",
-    ).view_as(labels)
-    token_log_probs = -token_nll
-    response_start = max(len(prompt_ids) - 1, 0)
-    return token_log_probs[:, response_start:].sum(dim=-1).squeeze(0)
+    log_probs = F.log_softmax(logits, dim=-1)
+    return log_probs.gather(dim=-1, index=labels.unsqueeze(-1)).squeeze(-1).sum()
 
 
 def compute_per_instance_dpo_loss(
@@ -412,16 +413,18 @@ def compute_per_instance_dpo_loss(
     lm.eval()
     lm_ref.eval()
 
-    chosen_log_prob = _response_log_prob_sum(lm, prompt, response_chosen, tokenizer)
-    rejected_log_prob = _response_log_prob_sum(lm, prompt, response_rejected, tokenizer)
+    chosen_log_prob = _sequence_log_prob_sum(lm, tokenizer, prompt, response_chosen)
+    rejected_log_prob = _sequence_log_prob_sum(lm, tokenizer, prompt, response_rejected)
 
     with torch.no_grad():
-        ref_chosen_log_prob = _response_log_prob_sum(lm_ref, prompt, response_chosen, tokenizer)
-        ref_rejected_log_prob = _response_log_prob_sum(lm_ref, prompt, response_rejected, tokenizer)
+        ref_chosen_log_prob = _sequence_log_prob_sum(lm_ref, tokenizer, prompt, response_chosen)
+        ref_rejected_log_prob = _sequence_log_prob_sum(lm_ref, tokenizer, prompt, response_rejected)
 
     if was_training:
         lm.train()
 
     pi_logratio = chosen_log_prob - rejected_log_prob
-    ref_logratio = ref_chosen_log_prob - ref_rejected_log_prob
+    ref_logratio = ref_chosen_log_prob.to(pi_logratio.device) - ref_rejected_log_prob.to(
+        pi_logratio.device
+    )
     return -F.logsigmoid(beta * (pi_logratio - ref_logratio))

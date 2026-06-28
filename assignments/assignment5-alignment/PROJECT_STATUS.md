@@ -1,16 +1,17 @@
 # Assignment 5 — Project Status
 
-**Status:** Required GRPO complete (self-study)  
-**Last verified:** 2026-06-25
+**Status:** Complete (self-study)  
+**Last verified:** 2026-06-28
 
 ## Test results
 
 | Suite | Result |
 |-------|--------|
-| `tests/test_grpo.py` | **19/19 pass** |
+| `tests/test_grpo.py` | 19/19 pass |
 | `tests/test_data.py` | 2/2 pass |
 | `tests/test_metrics.py` | 4/4 pass |
-| `tests/test_dpo.py` | 0/1 (optional; expected loss snapshot 0.9104 vs computed ~1.144) |
+| `tests/test_dpo.py` | 1/1 pass |
+| **Total** | **26/26 pass** |
 
 ## Implemented
 
@@ -22,7 +23,7 @@
 
 - Modal GRPO training run on GSM8K
 - AlpacaEval / safety eval pipelines
-- DPO training loop (loss helper implemented; unit snapshot mismatch)
+- DPO training loop (full HH training not run; per-instance loss test passes)
 
 ## Verify
 

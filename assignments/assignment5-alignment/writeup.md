@@ -23,7 +23,7 @@ All **19 required** snapshot tests in `tests/test_grpo.py` pass on Mac without G
 
 - Packed instruction-tuning dataset (Llama-3 tokenizer fixture).
 - MMLU / GSM8K output parsers for eval.
-- DPO per-instance loss (implementation present; optional test snapshot may differ slightly under Transformers 5.x).
+- DPO per-instance loss (Alpaca template + EOS; `tests/test_dpo.py` passes).
 
 ## Next steps (not run locally)
 
