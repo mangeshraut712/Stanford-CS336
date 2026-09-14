@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you cite this self-study portfolio (not official Stanford course materials), use this metadata."
+title: "Stanford CS336 — Language Modeling from Scratch (self-study implementations)"
+type: software
+authors:
+  - family-names: Raut
+    given-names: Mangesh
+    email: mbr63@drexel.edu
+    website: https://github.com/mangeshraut712
+repository-code: "https://github.com/mangeshraut712/Stanford-CS336"
+url: "https://cs336.stanford.edu/"
+license: MIT
+date-released: "2026-09-14"
+abstract: >-
+  Self-study implementations of Stanford CS336 (Spring 2026) assignments:
+  tokenizer and transformer training, systems optimizations, scaling laws,
+  data pipelines, and alignment (GRPO / DPO). Not a product; not official
+  course staff materials.
+keywords:
+  - language-modeling
+  - transformers
+  - CS336
+  - self-study
+  - GRPO

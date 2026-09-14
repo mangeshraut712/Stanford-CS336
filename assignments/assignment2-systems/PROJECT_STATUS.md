@@ -34,7 +34,7 @@ tests/adapters.py               # wires tests → cs336_systems
 
 ## Documentation
 
-- [`SOLUTION.md`](./SOLUTION.md), [`LEARNINGS.md`](./LEARNINGS.md), [`MONOREPO.md`](../../MONOREPO.md)
+- [`SOLUTION.md`](./SOLUTION.md), [`LEARNINGS.md`](./LEARNINGS.md), [`docs/LAYOUT.md`](../../docs/LAYOUT.md)
 
 ## Optional next steps
 

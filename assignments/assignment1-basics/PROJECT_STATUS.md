@@ -27,4 +27,4 @@ bash scripts/finalize_assignment.sh
 
 ## Portfolio
 
-Assignments 1–5 complete. See repo root [`README.md`](../../README.md), [`MONOREPO.md`](../../MONOREPO.md), and [`PROJECT_PURPOSE.md`](../../PROJECT_PURPOSE.md).
+Assignments 1–5 complete. See repo root [`README.md`](../../README.md), [`docs/LAYOUT.md`](../../docs/LAYOUT.md), and [`docs/PURPOSE.md`](../../docs/PURPOSE.md).
