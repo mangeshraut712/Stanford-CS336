@@ -1,7 +1,7 @@
 # CS336 Assignments
 
-Monorepo layout for self-study CS336 implementations.  
-See root [`PROJECT_PURPOSE.md`](../PROJECT_PURPOSE.md), [`MONOREPO.md`](../MONOREPO.md), and [`scripts/verify_all.sh`](../scripts/verify_all.sh).
+Monorepo layout for self-study CS336 (Spring 2026) implementations.  
+See [`docs/PURPOSE.md`](../docs/PURPOSE.md), [`docs/LAYOUT.md`](../docs/LAYOUT.md), and [`scripts/verify_all.sh`](../scripts/verify_all.sh).
 
 | Folder | Course assignment | Status | Verify |
 |--------|-------------------|--------|--------|

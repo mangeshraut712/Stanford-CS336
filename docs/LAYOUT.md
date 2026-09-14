@@ -1,18 +1,20 @@
 # Monorepo layout
 
-Self-study implementations for [Stanford CS336](https://cs336.stanford.edu/) live under `assignments/`. Each folder is an independent [`uv`](https://docs.astral.sh/uv/) project with its own `pyproject.toml`, tests, and docs.
+Self-study implementations for [Stanford CS336](https://cs336.stanford.edu/) (Spring 2026) live under `assignments/`. Each folder is an independent [`uv`](https://docs.astral.sh/uv/) project with its own `pyproject.toml`, tests, and docs.
 
 ```
 Stanford-CS336/
+├── README.md                    # GitHub landing page
+├── LICENSE                      # Portfolio docs (MIT); Stanford MIT in assignments/
+├── CITATION.cff
+├── docs/                        # Purpose, layout, this tree
 ├── assignments/
 │   ├── assignment1-basics/      # BPE, transformer, training
-│   ├── assignment2-systems/    # Flash attention, DDP, FSDP
-│   ├── assignment3-scaling/    # Scaling laws, isoflops API
-│   ├── assignment4-data/       # Data filtering & dedup
-│   └── assignment5-alignment/  # GRPO, SFT, DPO
-├── scripts/verify_all.sh      # One-command cross-check (A1–A5)
-├── PROJECT_PURPOSE.md
-└── README.md
+│   ├── assignment2-systems/     # Flash attention, DDP, FSDP
+│   ├── assignment3-scaling/     # Scaling laws, isoflops API
+│   ├── assignment4-data/        # Data filtering & dedup
+│   └── assignment5-alignment/   # GRPO, SFT, DPO
+└── scripts/verify_all.sh        # One-command cross-check (A1–A5)
 ```
 
 ## Verify everything
@@ -41,8 +43,12 @@ Each assignment includes where applicable:
 - `writeup.md` — narrative / analysis
 - `GOALS.md` — workflow (A3–A5)
 
+Portfolio overview: [`PURPOSE.md`](PURPOSE.md) and the [root README](../README.md).
+
 ## Local-only (not in git)
 
 - `*.bin` token memmaps, large checkpoints
 - `local-shared-data/` (A4 classifiers, ~2GB)
 - `.venv/`, `assignment*-main/` download stubs at repo root
+
+GitHub Pages is **not** configured. The A3 `examples/dashboard.html` file is meant to be opened locally.
