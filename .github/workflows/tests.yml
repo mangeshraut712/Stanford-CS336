@@ -1,0 +1,72 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    name: ${{ matrix.assignment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - assignment: assignment1-basics
+          - assignment: assignment2-systems
+          - assignment: assignment3-scaling
+            sync-args: --extra server
+            postgres: true
+          - assignment: assignment4-data
+            classifiers: true
+          - assignment: assignment5-alignment
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
+        with:
+          python-version: "3.12"
+          enable-cache: false
+
+      - name: Start PostgreSQL
+        if: matrix.postgres
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql
+          sudo service postgresql start
+          sudo -u postgres createuser --superuser "$USER"
+          pg_isready
+
+      - name: Install build headers
+        if: matrix.assignment == 'assignment4-data'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-dev build-essential
+
+      - name: Download Assignment 4 classifiers
+        if: matrix.classifiers
+        working-directory: assignments/assignment4-data
+        run: |
+          mkdir -p local-shared-data/classifiers
+          curl -fsSL -o local-shared-data/classifiers/lid.176.bin \
+            https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin
+          curl -fsSL -L -o local-shared-data/classifiers/dolma_fasttext_hatespeech_jigsaw_model.bin \
+            https://huggingface.co/allenai/dolma-jigsaw-fasttext-bigrams-hatespeech/resolve/main/model.bin
+          curl -fsSL -L -o local-shared-data/classifiers/dolma_fasttext_nsfw_jigsaw_model.bin \
+            https://huggingface.co/allenai/dolma-jigsaw-fasttext-bigrams-nsfw/resolve/main/model.bin
+
+      - name: Sync dependencies
+        working-directory: assignments/${{ matrix.assignment }}
+        run: uv sync --frozen ${{ matrix.sync-args }}
+
+      - name: Run tests
+        working-directory: assignments/${{ matrix.assignment }}
+        run: uv run pytest -q
