@@ -36,3 +36,6 @@ logs/
 
 # Nested git repos from vendored assignments
 **/.git/
+# Local agent tooling
+.agents/
+skills-lock.json
