@@ -23,7 +23,7 @@ gpu = [
     # community cp312/cu12/Torch 2.10 wheel to avoid source builds on Modal.
     "flash-attn @ https://github.com/lesj0610/flash-attention/releases/download/v2.8.3-cu12-torch2.10-cp312/flash_attn-2.8.3%2Bcu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl ; sys_platform == 'linux' and platform_machine == 'x86_64'",
     "torch",
-    "vllm==0.19.1",
+    "vllm==0.19.1 ; sys_platform == 'linux'",
     "wandb>=0.26.0",
 ]
 plots = [
