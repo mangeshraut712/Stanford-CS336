@@ -5,6 +5,7 @@ description = "CS 336 Spring 2026 Assignment 5: Reasoning RL"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"  # Python 3.13 not yet supported for some deps
 dependencies = [
+    "certifi>=2026.10.19",
     "accelerate>=1.5.2",
     "math-verify[antlr4-13-2]>=0.7.0",
     "modal>=1.1.0",

@@ -464,6 +464,7 @@ name = "cs336-scaling"
 version = "26.0.2"
 source = { editable = "." }
 dependencies = [
+    { name = "certifi" },
     { name = "pydantic" },
     { name = "requests" },
     { name = "rich" },
@@ -506,6 +507,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "certifi", specifier = ">=2026.10.19" },
     { name = "einops", marker = "extra == 'server'", specifier = ">=0.8.1" },
     { name = "einx", marker = "extra == 'server'", specifier = ">=0.3.0" },
     { name = "equinox", marker = "extra == 'server'", specifier = ">=0.13.0" },

@@ -136,6 +136,7 @@ name = "cs336-basics"
 version = "26.0.4"
 source = { editable = "cs336-basics" }
 dependencies = [
+    { name = "certifi" },
     { name = "einops" },
     { name = "einx" },
     { name = "jaxtyping" },
@@ -154,6 +155,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "certifi", specifier = ">=2026.10.19" },
     { name = "einops", specifier = ">=0.8" },
     { name = "einx", specifier = ">=0.4" },
     { name = "jaxtyping", specifier = ">=0.3" },
@@ -175,6 +177,7 @@ name = "cs336-systems"
 version = "26.1.4"
 source = { editable = "." }
 dependencies = [
+    { name = "certifi" },
     { name = "cs336-basics" },
     { name = "humanfriendly" },
     { name = "matplotlib" },
@@ -191,6 +194,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "certifi", specifier = ">=2026.10.19" },
     { name = "cs336-basics", editable = "cs336-basics" },
     { name = "humanfriendly" },
     { name = "matplotlib" },
