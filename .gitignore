@@ -30,6 +30,8 @@ logs/
 *.pt
 *.pth
 *.ckpt
+# TinyStories reference weights required by assignment 1 model tests.
+!assignments/assignment1-basics/tests/fixtures/ts_tests/model.pt
 
 # A4 offline assets (download via scripts/download_data.py)
 **/local-shared-data/

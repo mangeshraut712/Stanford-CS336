@@ -178,3 +178,5 @@ test_results.xml
 *.bin
 *.pt
 *.pth
+# Reference weights for tests/test_model.py (staff fixture, ~5MB).
+!tests/fixtures/ts_tests/model.pt

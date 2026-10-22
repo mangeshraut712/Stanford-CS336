@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import torch
+
 from cs336_systems.flash_attention import FlashAttentionPyTorch
 
 try:
