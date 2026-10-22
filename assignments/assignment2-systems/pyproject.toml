@@ -5,6 +5,7 @@ description = "CS336 Assignment 2 - Systems"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 dependencies = [
+    "certifi>=2026.10.19",
     "cs336-basics",
     "humanfriendly",
     "matplotlib",

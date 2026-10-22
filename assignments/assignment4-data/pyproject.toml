@@ -5,6 +5,7 @@ description = "CS336 Assignment 4 - Data Quality"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "certifi>=2026.10.19",
     "numpy<2.0",
     # Intel Macs
     "tqdm>=4.67.1",

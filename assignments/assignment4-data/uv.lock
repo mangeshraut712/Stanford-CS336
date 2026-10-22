@@ -373,6 +373,7 @@ name = "cs336-data"
 version = "26.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "certifi" },
     { name = "einops" },
     { name = "einx" },
     { name = "fasttext" },
@@ -410,6 +411,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "certifi", specifier = ">=2026.10.19" },
     { name = "einops", specifier = ">=0.8.1" },
     { name = "einx", specifier = ">=0.3.0" },
     { name = "fasttext", specifier = ">=0.9.3" },

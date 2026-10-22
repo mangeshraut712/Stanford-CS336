@@ -80,6 +80,7 @@ version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "accelerate" },
+    { name = "certifi" },
     { name = "math-verify", extra = ["antlr4-13-2"] },
     { name = "modal" },
     { name = "pylatexenc" },
@@ -108,6 +109,7 @@ plots = [
 requires-dist = [
     { name = "accelerate", specifier = ">=1.5.2" },
     { name = "alpaca-eval", marker = "extra == 'gpu'", specifier = ">=0.6.6" },
+    { name = "certifi", specifier = ">=2026.10.19" },
     { name = "flash-attn", marker = "platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'gpu'", url = "https://github.com/lesj0610/flash-attention/releases/download/v2.8.3-cu12-torch2.10-cp312/flash_attn-2.8.3%2Bcu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl" },
     { name = "math-verify", extras = ["antlr4-13-2"], specifier = ">=0.7.0" },
     { name = "modal", specifier = ">=1.1.0" },
