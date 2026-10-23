@@ -80,6 +80,11 @@ def compute_rollout_rewards(
         reward_fn(response, ground_truth)
         for response, ground_truth in zip(rollout_responses, repeated_ground_truths)
     ]
+    if not reward_components:
+        return torch.zeros(0, dtype=torch.float32), {
+            "mean_reward": 0.0,
+            "mean_format_reward": 0.0,
+        }
     raw_rewards = torch.tensor(
         [component["reward"] for component in reward_components],
         dtype=torch.float32,
@@ -101,6 +106,10 @@ def compute_group_normalized_rewards(
     advantage_eps: float = 1e-6,
     advantage_normalizer: Literal["std", "none", "mean"] = "std",
 ) -> tuple[Tensor, dict[str, float]]:
+    if group_size <= 0:
+        raise ValueError("group_size must be positive")
+    if raw_rewards.numel() % group_size != 0:
+        raise ValueError("raw_rewards length must be divisible by group_size")
     grouped = raw_rewards.view(-1, group_size)
     advantages = raw_rewards.clone()
 
@@ -186,6 +195,21 @@ def aggregate_loss_across_microbatch(
     return (per_token_policy_gradient_loss * mask).sum() / normalization_constant
 
 
+def _microbatch_slices(n_examples: int, gradient_accumulation_steps: int) -> list[tuple[int, int]]:
+    if gradient_accumulation_steps <= 0:
+        raise ValueError("gradient_accumulation_steps must be positive")
+    if n_examples < gradient_accumulation_steps:
+        raise ValueError("batch size must be at least gradient_accumulation_steps")
+    base, remainder = divmod(n_examples, gradient_accumulation_steps)
+    slices: list[tuple[int, int]] = []
+    start = 0
+    for step in range(gradient_accumulation_steps):
+        size = base + (1 if step < remainder else 0)
+        slices.append((start, start + size))
+        start += size
+    return slices
+
+
 def grpo_train_step(
     model: torch.nn.Module,
     tokenizer: PreTrainedTokenizerBase,
@@ -225,7 +249,7 @@ def grpo_train_step(
         tokenizer=tokenizer,
     )
     batch_size = len(repeated_prompts)
-    microbatch_size = batch_size // gradient_accumulation_steps
+    slices = _microbatch_slices(batch_size, gradient_accumulation_steps)
 
     optimizer.zero_grad(set_to_none=True)
     microbatch_losses: list[Tensor] = []
@@ -234,9 +258,7 @@ def grpo_train_step(
         **advantage_metadata,
     }
 
-    for microbatch_idx in range(gradient_accumulation_steps):
-        start = microbatch_idx * microbatch_size
-        end = start + microbatch_size
+    for start, end in slices:
         micro_input_ids = tokenized["input_ids"][start:end]
         micro_labels = tokenized["labels"][start:end]
         micro_response_mask = tokenized["response_mask"][start:end]
@@ -266,7 +288,7 @@ def grpo_train_step(
         if loss_normalization == "constant":
             micro_loss.backward()
         else:
-            (micro_loss / gradient_accumulation_steps).backward()
+            (micro_loss * ((end - start) / batch_size)).backward()
         microbatch_losses.append(micro_loss.detach())
 
         for key, value in loss_metadata.items():
@@ -282,10 +304,16 @@ def grpo_train_step(
 
     optimizer.step()
     optimizer.zero_grad(set_to_none=True)
+    stacked_losses = torch.stack(microbatch_losses)
     if loss_normalization == "constant":
-        reported_loss = torch.stack(microbatch_losses).sum()
+        reported_loss = stacked_losses.sum()
     else:
-        reported_loss = torch.stack(microbatch_losses).mean()
+        weights = torch.tensor(
+            [end - start for start, end in slices],
+            dtype=stacked_losses.dtype,
+            device=stacked_losses.device,
+        )
+        reported_loss = (stacked_losses * weights).sum() / batch_size
     return reported_loss, step_metadata
 
 
@@ -346,6 +374,10 @@ def get_packed_sft_dataset(
         start = chunk_idx * seq_length
         chunk_input = all_tokens[start : start + seq_length]
         chunk_labels = all_tokens[start + 1 : start + seq_length + 1]
+        # The last chunk has no next token when the stream length is a multiple of
+        # seq_length. Drop it instead of emitting a short label row.
+        if len(chunk_input) != seq_length or len(chunk_labels) != seq_length:
+            continue
         input_ids.append(chunk_input)
         labels.append(chunk_labels)
 
@@ -356,7 +388,7 @@ def iterate_batches(
     dataset: Dataset,
     batch_size: int,
     shuffle: bool,
-):
+) -> DataLoader[dict[str, Tensor]]:
     return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 
@@ -392,12 +424,22 @@ def _sequence_log_prob_sum(
 ) -> Tensor:
     template = _load_alpaca_sft_template()
     text = template.format(instruction=instruction, response=response)
-    token_ids = tokenizer.encode(text, add_special_tokens=False) + [tokenizer.eos_token_id]
-    input_ids = torch.tensor([token_ids[:-1]], device=next(model.parameters()).device)
-    labels = torch.tensor([token_ids[1:]], device=input_ids.device)
+    prefix = text[: text.rfind(response)] if response else text
+    prefix_ids = tokenizer.encode(prefix, add_special_tokens=False)
+    token_ids = tokenizer.encode(text, add_special_tokens=False)
+    if tokenizer.eos_token_id is not None:
+        token_ids = token_ids + [tokenizer.eos_token_id]
+    response_start = len(prefix_ids) if token_ids[: len(prefix_ids)] == prefix_ids else 0
+    device = next(model.parameters()).device
+    input_ids = torch.tensor([token_ids[:-1]], device=device)
+    labels = torch.tensor([token_ids[1:]], device=device)
     logits = model(input_ids).logits
     log_probs = F.log_softmax(logits, dim=-1)
-    return log_probs.gather(dim=-1, index=labels.unsqueeze(-1)).squeeze(-1).sum()
+    token_log_probs = log_probs.gather(dim=-1, index=labels.unsqueeze(-1)).squeeze(-1).squeeze(0)
+    # token_log_probs[i] predicts token_ids[i + 1]. The first response token is
+    # therefore at index response_start - 1.
+    start = max(response_start - 1, 0)
+    return token_log_probs[start:].sum()
 
 
 def compute_per_instance_dpo_loss(

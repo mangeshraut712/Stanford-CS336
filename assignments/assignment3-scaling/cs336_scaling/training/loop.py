@@ -14,6 +14,20 @@ from cs336_scaling.training.model.basic_model import BasicCausalLM
 from cs336_scaling.training.training_config import TrainingConfig
 
 
+def fsdp_mean(per_example_loss: Float[Array, " examples"]) -> Float[Array, ""]:
+    """Mean across the ``fsdp`` axis.
+
+    ``psum`` of the local sums counts every example once. Dividing by the local
+    example count instead would scale the loss by the number of devices.
+    """
+    total = jax.lax.psum(per_example_loss.sum(), axis_name="fsdp")
+    count = jax.lax.psum(
+        jnp.asarray(per_example_loss.shape[0], dtype=per_example_loss.dtype),
+        axis_name="fsdp",
+    )
+    return total / count
+
+
 @partial(
     jax.shard_map,
     out_specs=P(),
@@ -38,9 +52,7 @@ def sharded_sequence_loss(
         return per_token.sum() / batch.sequence_length()
 
     per_example_sequence_loss = _sequence_loss_impl(model, state, batch)
-    numerator = jax.lax.psum(per_example_sequence_loss.sum(), axis_name="fsdp")
-    denom = batch.n_sequences()
-    return numerator / denom
+    return fsdp_mean(per_example_sequence_loss)
 
 
 def train_model(

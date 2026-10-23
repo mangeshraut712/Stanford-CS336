@@ -71,3 +71,36 @@ jobs:
       - name: Run tests
         working-directory: assignments/${{ matrix.assignment }}
         run: uv run pytest -q
+
+  typecheck:
+    name: typecheck ${{ matrix.assignment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - assignment: assignment1-basics
+            targets: cs336_basics
+          - assignment: assignment2-systems
+            targets: cs336_systems cs336-basics/cs336_basics
+          - assignment: assignment3-scaling
+            sync-args: --extra server --group dev
+            targets: cs336_scaling
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.2
+        with:
+          python-version: "3.12"
+          enable-cache: false
+
+      - name: Sync dependencies
+        working-directory: assignments/${{ matrix.assignment }}
+        run: uv sync --frozen ${{ matrix.sync-args }}
+
+      - name: Run ty
+        working-directory: assignments/${{ matrix.assignment }}
+        run: uv run ty check ${{ matrix.targets }}

@@ -48,9 +48,28 @@ def _minhash_signature(shingles: set[str], num_hashes: int) -> list[int]:
     ]
 
 
-def _jaccard_from_signatures(sig_a: list[int], sig_b: list[int]) -> float:
-    matches = sum(a == b for a, b in zip(sig_a, sig_b))
-    return matches / len(sig_a)
+def _jaccard(left: set[str], right: set[str]) -> float:
+    if not left and not right:
+        return 1.0
+    union = len(left | right)
+    if union == 0:
+        return 0.0
+    return len(left & right) / union
+
+
+def _band_ranges(num_hashes: int, num_bands: int) -> list[tuple[int, int]]:
+    if num_bands <= 0 or num_hashes <= 0:
+        raise ValueError("num_hashes and num_bands must be positive")
+    if num_hashes < num_bands:
+        raise ValueError("num_hashes must be at least num_bands")
+    base, extra = divmod(num_hashes, num_bands)
+    ranges: list[tuple[int, int]] = []
+    start = 0
+    for band_idx in range(num_bands):
+        width = base + (1 if band_idx < extra else 0)
+        ranges.append((start, start + width))
+        start += width
+    return ranges
 
 
 class _UnionFind:
@@ -82,19 +101,18 @@ def minhash_deduplication(
 
     paths = sorted([Path(p) for p in input_files], key=lambda p: p.name)
     texts = [p.read_text() for p in paths]
-    signatures = [_minhash_signature(_word_shingles(text, ngrams), num_hashes) for text in texts]
+    shingle_sets = [_word_shingles(text, ngrams) for text in texts]
+    signatures = [_minhash_signature(shingles, num_hashes) for shingles in shingle_sets]
 
-    rows_per_band = num_hashes // num_bands
     uf = _UnionFind(len(paths))
-    buckets: dict[tuple[int, int], list[int]] = defaultdict(list)
+    buckets: dict[tuple[int, tuple[int, ...]], list[int]] = defaultdict(list)
 
     for doc_idx, sig in enumerate(signatures):
-        for band_idx in range(num_bands):
-            start = band_idx * rows_per_band
-            band = tuple(sig[start : start + rows_per_band])
+        for band_idx, (start, stop) in enumerate(_band_ranges(num_hashes, num_bands)):
+            band = tuple(sig[start:stop])
             key = (band_idx, band)
             for other_idx in buckets[key]:
-                if _jaccard_from_signatures(sig, signatures[other_idx]) >= jaccard_threshold:
+                if _jaccard(shingle_sets[doc_idx], shingle_sets[other_idx]) >= jaccard_threshold:
                     uf.union(doc_idx, other_idx)
             buckets[key].append(doc_idx)
 

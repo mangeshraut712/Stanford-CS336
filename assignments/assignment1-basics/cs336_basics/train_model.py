@@ -5,6 +5,7 @@ import logging
 import math
 import os
 import warnings
+from typing import cast
 
 import einx
 import torch
@@ -80,11 +81,12 @@ class RotaryEmbedding(nn.Module):
         self, x: Float[Tensor, " ... seq d"], pos_ids: Int[Tensor, " ... seq"] | None
     ) -> Float[Tensor, " ... seq d"]:
         x1, x2 = rearrange(x, "... (half_d xy) -> xy ... half_d", xy=2).unbind(0)
+        freq_cis = cast(Tensor, self._freq_cis_cache)
         if pos_ids is not None:
-            cos, sin = einx.get_at("cos_sin [pos] half_dim, ... -> cos_sin ... half_dim", self._freq_cis_cache, pos_ids)
+            cos, sin = einx.get_at("cos_sin [pos] half_dim, ... -> cos_sin ... half_dim", freq_cis, pos_ids)
         else:
             seq_len = x.size(-2)
-            cos, sin = self._freq_cis_cache[:, :seq_len, :].unbind(0)
+            cos, sin = freq_cis[:, :seq_len, :].unbind(0)
         x1_rot = cos * x1 - sin * x2
         x2_rot = sin * x1 + cos * x2
         return einx.id("... x_half, ... x_half -> ... (x_half (1 + 1))", x1_rot, x2_rot).contiguous()
@@ -145,7 +147,7 @@ class CausalMultiHeadSelfAttention(nn.Module):
         causal_mask = rearrange(iota, "query -> query 1") >= rearrange(iota, "key -> 1 key")
         causal_mask = causal_mask[(None,) * len(batch_dims) + (...,)]
         attn_output = scaled_dot_product_attention(K=K, Q=Q, V=V, mask=causal_mask)
-        attn_output = rearrange(attn_output, "batch heads seq d_v -> batch seq (heads d_v)").contiguous()
+        attn_output = rearrange(attn_output, "... heads seq d_v -> ... seq (heads d_v)").contiguous()
         return self.output_proj(attn_output)
 
 
@@ -267,24 +269,49 @@ class BasicsTransformerLM(nn.Module):
         temperature: float = 1.0,
         top_k: int | None = None,
         eos_token_id: int | None = None,
-    ):
+    ) -> torch.Tensor:
         if x.dim() == 1:
             x = x.unsqueeze(0)
-        original_sequence_length = x.size(-1)
+        if temperature < 0:
+            raise ValueError("temperature must be non-negative")
+        batch = x.shape[0]
+        rows: list[list[int]] = [[] for _ in range(batch)]
+        finished = [False] * batch
         for _ in range(max_new_tokens):
-            x = x[:, -self.context_length :] if x.size(1) > self.context_length else x
-            logits = self.forward(x)
-            next_token_logits = logits[:, -1] / temperature
-            if top_k:
-                topk_values, _ = torch.topk(next_token_logits, min(top_k, next_token_logits.size(-1)))
-                threshold = topk_values[:, -1]
-                next_token_logits = next_token_logits.masked_fill(next_token_logits < threshold, float("-inf"))
-            next_token_probabilities = softmax(next_token_logits, dim=-1)
-            next_token_id = torch.multinomial(next_token_probabilities, 1)
-            if eos_token_id is not None and next_token_id.item() == eos_token_id:
+            if all(finished):
                 break
-            x = torch.cat((x, next_token_id), dim=-1)
-        return x[:, original_sequence_length:]
+            logits = self.forward(x[:, -self.context_length :])[:, -1]
+            next_token_logits = logits if temperature == 0 else logits / temperature
+            if top_k:
+                topk_values, _ = torch.topk(
+                    next_token_logits, min(top_k, next_token_logits.size(-1))
+                )
+                threshold = topk_values[:, -1]
+                next_token_logits = next_token_logits.masked_fill(
+                    next_token_logits < threshold, float("-inf")
+                )
+            if temperature == 0:
+                next_ids = torch.argmax(next_token_logits, dim=-1)
+            else:
+                next_ids = torch.multinomial(softmax(next_token_logits, dim=-1), 1).squeeze(-1)
+            for row in range(batch):
+                if finished[row]:
+                    continue
+                token = int(next_ids[row].item())
+                if eos_token_id is not None and token == eos_token_id:
+                    finished[row] = True
+                    continue
+                rows[row].append(token)
+            x = torch.cat((x, next_ids.unsqueeze(-1)), dim=-1)
+        width = max((len(row) for row in rows), default=0)
+        if width == 0:
+            return x.new_empty(batch, 0)
+        pad_id = 0 if eos_token_id is None else eos_token_id
+        output = x.new_full((batch, width), pad_id)
+        for row, tokens in enumerate(rows):
+            if tokens:
+                output[row, : len(tokens)] = torch.tensor(tokens, dtype=output.dtype, device=output.device)
+        return output
 
     def save_pretrained(self, output_dir: str | os.PathLike) -> None:
         output_dir = os.fspath(output_dir)
