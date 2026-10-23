@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from typing import Any
 
 import torch
 
@@ -28,7 +29,8 @@ class FlashAttentionPyTorch(torch.autograd.Function):
         return output
 
     @staticmethod
-    def backward(ctx, grad_output: torch.Tensor):
+    def backward(ctx: Any, *grad_outputs: Any) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, None]:
+        grad_output = grad_outputs[0]
         q, k, v, output, logsumexp = ctx.saved_tensors
         scale = ctx.scale
         scores = torch.matmul(q, k.transpose(-2, -1)) * scale
@@ -49,5 +51,10 @@ class FlashAttentionPyTorch(torch.autograd.Function):
         return grad_q, grad_k, grad_v, None
 
 
-def flash_attention_pytorch(q, k, v, is_causal=False):
+def flash_attention_pytorch(
+    q: torch.Tensor,
+    k: torch.Tensor,
+    v: torch.Tensor,
+    is_causal: bool = False,
+) -> torch.Tensor:
     return FlashAttentionPyTorch.apply(q, k, v, is_causal)

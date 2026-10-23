@@ -143,15 +143,14 @@ class RotaryEmbedding(nn.Module):
             seq_len = x.size(-2)
             cos, sin = self._freq_cis_cache[:, :seq_len, :].unbind(0)
 
-        # 2D rotation matrix applied to pairs in x
+        # 2D rotation matrix applied to pairs in x. Interleave the halves so each
+        # rotated pair lands back on its original even/odd dimensions.
         x1_rot = cos * x1 - sin * x2
         x2_rot = sin * x1 + cos * x2
-        # result = einx.id("... x_half, ... x_half -> ... (x_half (1 + 1))", x1_rot, x2_rot).contiguous()
-        result = torch.concat((x1_rot, x2_rot), dim=-1)
-        return result
+        return einx.id("... x_half, ... x_half -> ... (x_half (1 + 1))", x1_rot, x2_rot).contiguous()
 
-    def extra_repr(self):
-        return f"context_length={self._freq_cis_cache.shape[0]}, dim/2={self._freq_cis_cache.shape[1]}"
+    def extra_repr(self) -> str:
+        return f"context_length={self._freq_cis_cache.shape[1]}, dim/2={self._freq_cis_cache.shape[2]}"
 
 
 class BasicsTransformerLM(nn.Module):
@@ -521,7 +520,7 @@ class CausalMultiHeadSelfAttention(nn.Module):
 
         # Concatenate the attention output from all heads.
         # (..., sequence_length, num_heads * d_v).
-        attn_output = rearrange(attn_output, "batch heads seq d_v -> batch seq (heads d_v)").contiguous()
+        attn_output = rearrange(attn_output, "... heads seq d_v -> ... seq (heads d_v)").contiguous()
 
         # Apply the output projection
         output = self.output_proj(attn_output)

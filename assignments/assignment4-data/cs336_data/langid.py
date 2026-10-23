@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from cs336_data.classifiers import load_fasttext_model, predict_label
 
 
@@ -10,7 +12,7 @@ def identify_language(text: str) -> tuple[str, float]:
     return predict_label(model, text)
 
 
-def make_is_english(threshold: float = 0.7):
+def make_is_english(threshold: float = 0.7) -> Callable[[str], bool]:
     model = load_fasttext_model("lid.176.bin")
 
     def is_english(text: str) -> bool:

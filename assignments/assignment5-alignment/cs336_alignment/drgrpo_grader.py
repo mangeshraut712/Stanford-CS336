@@ -720,7 +720,7 @@ def _is_int(x: float) -> bool:
 
 
 def _is_frac(expr: str) -> bool:
-    return bool(re.search(r"^-?[0-9]+.?/0*[1-9][0-9]*.?$", expr))
+    return bool(re.search(r"^-?[0-9]+\.?/0*[1-9][0-9]*\.?$", expr))
 
 
 def _str_is_int(x: str) -> bool:
@@ -732,10 +732,9 @@ def _str_is_int(x: str) -> bool:
         return False
 
 
-def _str_to_int(x: str) -> bool:
+def _str_to_int(x: str) -> int:
     x = x.replace(",", "")
-    x = float(x)
-    return int(x)
+    return int(round(float(x)))
 
 
 def _inject_implicit_mixed_number(step: str):
@@ -1019,10 +1018,10 @@ def r1_zero_reward_fn(response, ground_truth, fast=True):
                 }
         if isinstance(ground_truth, float) or isinstance(ground_truth, int):
             ground_truth = str(ground_truth)
+        is_correct = False
         if isinstance(ground_truth, str):
             is_correct = grade(model_answer, ground_truth, fast)
         elif isinstance(ground_truth, list):
-            is_correct = False
             for gt in ground_truth:
                 is_correct |= grade(model_answer, gt, fast)
         if is_correct:
@@ -1058,10 +1057,10 @@ def question_only_reward_fn(response, ground_truth, fast=True):
         }
     if isinstance(ground_truth, float) or isinstance(ground_truth, int):
         ground_truth = str(ground_truth)
+    is_correct = False
     if isinstance(ground_truth, str):
         is_correct = grade(model_answer, ground_truth, fast)
     elif isinstance(ground_truth, list):
-        is_correct = False
         for gt in ground_truth:
             is_correct |= grade(model_answer, gt, fast)
     if is_correct:

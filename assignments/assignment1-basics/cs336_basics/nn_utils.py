@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
+
 import torch
 from torch import Tensor
 
@@ -20,11 +22,12 @@ def cross_entropy(inputs: Tensor, targets: Tensor) -> Tensor:
     return torch.mean(torch.gather(negative_log_probs, -1, targets.unsqueeze(-1)))
 
 
-def clip_gradient(parameters, max_norm: float) -> None:
+def clip_gradient(parameters: Iterable[torch.nn.Parameter], max_norm: float) -> None:
     grads = [parameter.grad for parameter in parameters if parameter.grad is not None]
     if not grads:
         return
-    norm = torch.sqrt(sum(torch.sum(grad * grad) for grad in grads))
+    squared_norm = torch.stack([torch.sum(grad * grad) for grad in grads]).sum()
+    norm = torch.sqrt(squared_norm)
     clip_coef = min(1.0, max_norm / (norm + 1e-6))
     for grad in grads:
         grad.mul_(clip_coef)

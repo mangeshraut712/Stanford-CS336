@@ -1,3 +1,25 @@
+# ruff: noqa: E402
+# XLA's CPU device count and the CUDA plugin stub must be installed before any
+# import that initializes JAX.
+import os
+import sys
+import types
+
+os.environ.setdefault("XLA_FLAGS", "--xla_force_host_platform_device_count=2")
+os.environ.setdefault("JAX_PLATFORMS", "cpu")
+
+# jax[cuda13] registers a PJRT plugin whose CUDA version probe segfaults when the
+# host only has stub libraries. These tests use the CPU backend.
+_CUDA_PLUGIN = "jax_plugins.xla_cuda13"
+if _CUDA_PLUGIN not in sys.modules:
+    _cuda_plugin = types.ModuleType(_CUDA_PLUGIN)
+
+    def _skip_cuda_plugin_init() -> None:
+        return None
+
+    _cuda_plugin.initialize = _skip_cuda_plugin_init
+    sys.modules[_CUDA_PLUGIN] = _cuda_plugin
+
 from collections.abc import Generator
 from uuid import uuid4
 

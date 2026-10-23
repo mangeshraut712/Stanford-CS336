@@ -51,6 +51,11 @@ filterwarnings = [
     "ignore:TensorFloat32:UserWarning",
 ]
 
+[tool.ty.src]
+# Triton's JIT stubs are not precise enough for ty. The kernel is covered by
+# the CUDA staff tests, which skip when Triton or a GPU is unavailable.
+exclude = ["**/flash_attention_triton.py"]
+
 [tool.ruff]
 line-length = 180
 

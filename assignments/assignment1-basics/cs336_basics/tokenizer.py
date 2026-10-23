@@ -4,18 +4,22 @@ import json
 import os
 import regex
 from collections import Counter
+from collections.abc import Generator, Iterable
 from multiprocessing import Pool
-from typing import BinaryIO, Iterable
 
 from cs336_basics.pretokenization_example import find_chunk_boundaries
 
 GPT2_PAT = r"""'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"""
 
 
+def _token_length(token: str) -> int:
+    return len(token)
+
+
 def _split_on_special_tokens(text: str, special_tokens: list[str]) -> list[str]:
     if not special_tokens:
         return [text]
-    ordered = sorted(special_tokens, key=len, reverse=True)
+    ordered = sorted(special_tokens, key=_token_length, reverse=True)
     pattern = "|".join(regex.escape(token) for token in ordered)
     return regex.split(f"({pattern})", text)
 
@@ -133,6 +137,26 @@ def _pretokenize_file_parallel(input_path: str | os.PathLike, special_tokens: li
     return merged
 
 
+def _longest_special_prefix_suffix(buffer: str, special_tokens: list[str]) -> int:
+    """Length of the longest suffix of ``buffer`` that is a proper prefix of a special token."""
+    longest = 0
+    for token in special_tokens:
+        limit = min(len(buffer), len(token) - 1)
+        for size in range(limit, 0, -1):
+            if token.startswith(buffer[-size:]):
+                longest = max(longest, size)
+                break
+    return longest
+
+
+def _last_pretoken_start(text: str) -> int:
+    """Start index of the last GPT-2 pretoken, or 0 when the text is a single pretoken."""
+    matches = list(regex.finditer(GPT2_PAT, text))
+    if len(matches) <= 1:
+        return 0
+    return matches[-1].start()
+
+
 def train_bpe(
     input_path: str | os.PathLike,
     vocab_size: int,
@@ -176,6 +200,8 @@ def train_bpe(
 
 
 class Tokenizer:
+    special_tokens: list[str]
+
     def __init__(
         self,
         vocab: dict[int, bytes],
@@ -184,10 +210,12 @@ class Tokenizer:
     ):
         self.vocab = vocab
         self.merges = merges
-        self.special_tokens = special_tokens or []
+        self.special_tokens = list(special_tokens or [])
         self.bytes_to_id = {token_bytes: token_id for token_id, token_bytes in vocab.items()}
         self.id_to_bytes = dict(vocab)
-        self.bpe_ranks = {left + right: i for i, (left, right) in enumerate(merges)}
+        # Key by the pair, not by left+right. Distinct pairs can concatenate to the
+        # same bytes, and a concatenated key merges the wrong pair.
+        self.bpe_ranks = {(left, right): i for i, (left, right) in enumerate(merges)}
         self._special_bytes = {token.encode("utf-8") for token in self.special_tokens}
 
     def _bpe_encode_bytes(self, piece: bytes) -> list[int]:
@@ -196,8 +224,7 @@ class Tokenizer:
             best_rank: int | None = None
             best_index: int | None = None
             for i in range(len(parts) - 1):
-                pair = parts[i] + parts[i + 1]
-                rank = self.bpe_ranks.get(pair)
+                rank = self.bpe_ranks.get((parts[i], parts[i + 1]))
                 if rank is not None and (best_rank is None or rank < best_rank):
                     best_rank = rank
                     best_index = i
@@ -223,47 +250,64 @@ class Tokenizer:
     def decode(self, ids: list[int]) -> str:
         return b"".join(self.id_to_bytes[token_id] for token_id in ids).decode("utf-8", errors="replace")
 
+    def _find_earliest_special(self, buffer: str) -> tuple[int | None, str | None]:
+        earliest_index: int | None = None
+        earliest_token: str | None = None
+        for token in sorted(self.special_tokens, key=_token_length, reverse=True):
+            index = buffer.find(token)
+            if index != -1 and (earliest_index is None or index < earliest_index):
+                earliest_index = index
+                earliest_token = token
+        return earliest_index, earliest_token
+
+    def _yield_ready_tokens(self, buffer: str) -> Generator[int, None, str]:
+        """Yield ids for a complete prefix of ``buffer`` and return the remainder.
+
+        The remainder keeps an unfinished pretoken and any suffix that is only a
+        prefix of a special token, so chunk boundaries match ``encode``.
+        """
+        while buffer:
+            earliest_index, earliest_token = self._find_earliest_special(buffer)
+            if earliest_token is not None and earliest_index == 0:
+                buffer = buffer[len(earliest_token) :]
+                yield self.bytes_to_id[earliest_token.encode("utf-8")]
+                continue
+            if earliest_index is not None and earliest_index > 0:
+                prefix = buffer[:earliest_index]
+                buffer = buffer[earliest_index:]
+                yield from self.encode(prefix)
+                continue
+
+            hold = _longest_special_prefix_suffix(buffer, self.special_tokens)
+            body = buffer[:-hold] if hold else buffer
+            if not body:
+                break
+
+            newline_at = body.rfind("\n")
+            if newline_at != -1:
+                emit = body[: newline_at + 1]
+                buffer = buffer[len(emit) :]
+                yield from self.encode(emit)
+                continue
+
+            if len(buffer) > 4096:
+                end = _last_pretoken_start(body)
+                if end <= 0:
+                    break
+                emit = body[:end]
+                buffer = buffer[len(emit) :]
+                yield from self.encode(emit)
+                continue
+            break
+        return buffer
+
     def encode_iterable(self, iterable: Iterable[str]) -> Iterable[int]:
         buffer = ""
         for chunk in iterable:
             buffer += chunk
-            while buffer:
-                if self.special_tokens:
-                    earliest_index: int | None = None
-                    earliest_token: str | None = None
-                    for token in sorted(self.special_tokens, key=len, reverse=True):
-                        index = buffer.find(token)
-                        if index != -1 and (earliest_index is None or index < earliest_index):
-                            earliest_index = index
-                            earliest_token = token
-                    if earliest_index is not None and earliest_index > 0:
-                        prefix = buffer[:earliest_index]
-                        buffer = buffer[earliest_index:]
-                        for token_id in self.encode(prefix):
-                            yield token_id
-                        continue
-                    if earliest_index == 0 and earliest_token is not None:
-                        buffer = buffer[len(earliest_token) :]
-                        yield self.bytes_to_id[earliest_token.encode("utf-8")]
-                        continue
-
-                if "\n" in buffer:
-                    line, buffer = buffer.split("\n", 1)
-                    line += "\n"
-                    for token_id in self.encode(line):
-                        yield token_id
-                    continue
-
-                if len(buffer) > 4096:
-                    for token_id in self.encode(buffer):
-                        yield token_id
-                    buffer = ""
-                    break
-                break
-
+            buffer = yield from self._yield_ready_tokens(buffer)
         if buffer:
-            for token_id in self.encode(buffer):
-                yield token_id
+            yield from self.encode(buffer)
 
     def save(self, output_dir: str | os.PathLike) -> None:
         output_dir = os.fspath(output_dir)

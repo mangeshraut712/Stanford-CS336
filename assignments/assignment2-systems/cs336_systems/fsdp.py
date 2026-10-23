@@ -9,6 +9,16 @@ from cs336_basics.model import Embedding, Linear
 from einops import einsum
 
 
+def _pad_rows(weight: torch.Tensor, world_size: int) -> tuple[torch.Tensor, int]:
+    """Pad row count to a multiple of ``world_size`` so every rank gets an equal shard."""
+    original_rows = weight.shape[0]
+    remainder = original_rows % world_size
+    if remainder == 0:
+        return weight, original_rows
+    padding = weight.new_zeros((world_size - remainder, *weight.shape[1:]))
+    return torch.cat((weight, padding), dim=0), original_rows
+
+
 def _gather_full_weight(weight_shard: torch.Tensor, world_size: int) -> torch.Tensor:
     shards = [torch.empty_like(weight_shard) for _ in range(world_size)]
     dist.all_gather(shards, weight_shard)
@@ -26,12 +36,20 @@ def _gathered_weight_with_hook(
     weight_shard: nn.Parameter,
     world_size: int,
     compute_dtype: torch.dtype | None,
+    full_rows: int,
 ) -> torch.Tensor:
     with torch.no_grad():
-        full_weight = _gather_full_weight(weight_shard, world_size)
-    full_weight = full_weight.detach().requires_grad_(True)
+        padded_weight = _gather_full_weight(weight_shard, world_size)
+    padded_rows = padded_weight.shape[0]
+    full_weight = padded_weight[:full_rows].detach().requires_grad_(True)
 
     def _shard_grad_hook(grad_full: torch.Tensor) -> None:
+        if grad_full.shape[0] < padded_rows:
+            missing = padded_rows - grad_full.shape[0]
+            grad_full = torch.cat(
+                (grad_full, grad_full.new_zeros((missing, *grad_full.shape[1:]))),
+                dim=0,
+            )
         grad_shard = _reduce_to_shard(grad_full, world_size)
         if compute_dtype is not None:
             grad_shard = grad_shard.to(torch.float32)
@@ -65,27 +83,41 @@ class FSDP(nn.Module):
 
     def _shard_module(self, name: str, module: nn.Module, *, linear: bool) -> None:
         full_weight = module.weight
-        shard_rows = full_weight.shape[0] // self._world_size
+        if not isinstance(full_weight, nn.Parameter):
+            raise TypeError(f"{name} weight is not a parameter")
+        padded_weight, full_rows = _pad_rows(full_weight.detach(), self._world_size)
+        shard_rows = padded_weight.shape[0] // self._world_size
         start = self._rank * shard_rows
-        module.weight = nn.Parameter(full_weight.data[start : start + shard_rows].clone())
+        module.weight = nn.Parameter(padded_weight[start : start + shard_rows].clone())
+        setattr(module, "_fsdp_full_rows", full_rows)
         self._sharded_modules[name] = module
+
+        def _weight_parameter(mod: nn.Module) -> nn.Parameter:
+            weight = mod.weight
+            if not isinstance(weight, nn.Parameter):
+                raise TypeError("sharded weight is not a parameter")
+            return weight
 
         if linear:
 
-            def linear_forward(x, mod=module):
-                weight = _gathered_weight_with_hook(mod.weight, self._world_size, self.compute_dtype)
+            def linear_forward(x: torch.Tensor, mod: nn.Module = module) -> torch.Tensor:
+                weight = _gathered_weight_with_hook(
+                    _weight_parameter(mod), self._world_size, self.compute_dtype, full_rows
+                )
                 return einsum(x, weight, "... d_in, d_out d_in -> ... d_out")
 
-            module.forward = linear_forward
+            module.forward = linear_forward  # type: ignore[method-assign]
         else:
 
-            def embedding_forward(token_ids, mod=module):
-                weight = _gathered_weight_with_hook(mod.weight, self._world_size, self.compute_dtype)
+            def embedding_forward(token_ids: torch.Tensor, mod: nn.Module = module) -> torch.Tensor:
+                weight = _gathered_weight_with_hook(
+                    _weight_parameter(mod), self._world_size, self.compute_dtype, full_rows
+                )
                 return weight[token_ids, :]
 
-            module.forward = embedding_forward
+            module.forward = embedding_forward  # type: ignore[method-assign]
 
-    def forward(self, *args, **kwargs):
+    def forward(self, *args: object, **kwargs: object) -> object:
         return self.module(*args, **kwargs)
 
     def finish_gradient_synchronization(self) -> None:
@@ -109,5 +141,7 @@ def gather_full_params(fsdp_model: FSDP) -> dict[str, torch.Tensor]:
         shard_shape = param.shape
         shards = [torch.empty(shard_shape, device=param.device, dtype=param.dtype) for _ in range(fsdp_model._world_size)]
         dist.all_gather(shards, param.data)
-        result[name] = torch.cat(shards, dim=0)
+        gathered = torch.cat(shards, dim=0)
+        full_rows = getattr(fsdp_model._sharded_modules[module_name], "_fsdp_full_rows", gathered.shape[0])
+        result[name] = gathered[:full_rows].contiguous()
     return result

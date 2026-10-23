@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Iterable
+from typing import overload
 
 import torch
 
@@ -34,7 +35,13 @@ class AdamW(torch.optim.Optimizer):
         defaults = dict(lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
         super().__init__(params, defaults)
 
-    def step(self, closure: Callable | None = None):
+    @overload
+    def step(self, closure: None = None) -> None: ...
+
+    @overload
+    def step(self, closure: Callable[[], float]) -> float: ...
+
+    def step(self, closure: Callable[[], float] | None = None) -> float | None:
         loss = None
         if closure is not None:
             loss = closure()

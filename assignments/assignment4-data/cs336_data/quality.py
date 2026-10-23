@@ -18,6 +18,11 @@ def _non_symbol_words(text: str) -> list[str]:
     return [word for word in re.findall(r"\S+", text) if re.search(r"[^\W_]", word, flags=re.UNICODE)]
 
 
+def _ends_with_ellipsis(line: str) -> bool:
+    stripped = line.rstrip()
+    return stripped.endswith("...") or stripped.endswith("…")
+
+
 def gopher_quality_filter(text: str) -> bool:
     words = _non_symbol_words(text)
     if len(words) < 50 or len(words) > 100_000:
@@ -29,7 +34,7 @@ def gopher_quality_filter(text: str) -> bool:
 
     lines = text.splitlines() or [text]
     if lines:
-        ellipsis_lines = sum(1 for line in lines if line.rstrip().endswith("..."))
+        ellipsis_lines = sum(1 for line in lines if _ends_with_ellipsis(line))
         if ellipsis_lines / len(lines) > 0.3:
             return False
 
