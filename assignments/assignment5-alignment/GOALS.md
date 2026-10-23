@@ -28,7 +28,6 @@ Implement **alignment / reasoning RL** with GRPO on GSM8K-style math rollouts, p
 
 ```bash
 cd assignments/assignment5-alignment
-uv sync --no-install-package flash-attn
 uv sync
 bash scripts/finalize_assignment.sh
 ```

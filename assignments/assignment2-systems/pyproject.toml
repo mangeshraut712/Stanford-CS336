@@ -12,7 +12,7 @@ dependencies = [
     "numpy",
     "pytest>=8",
     "regex>=2026.3.32",
-    "torch~=2.11.0",
+    "torch>=2.13.0",
     "tqdm>=4.67.1",
     "wandb>=0.19.7",
     "pandas>=2",
@@ -31,6 +31,10 @@ module-root = ""
 [tool.uv]
 package = true
 python-preference = "managed"
+constraint-dependencies = [
+    "idna>=3.15",
+    "setuptools>=83",
+]
 
 [tool.uv.sources]
 cs336-basics = { path = "./cs336-basics", editable = true } # Change this path to your assignment1-basics repo you want to use your own implementation!

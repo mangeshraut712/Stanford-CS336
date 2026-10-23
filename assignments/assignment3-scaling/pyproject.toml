@@ -45,6 +45,9 @@ package = true
 python-preference = "managed"
 # Floors for transitive high/critical advisories (starlette, python-multipart).
 constraint-dependencies = [
+    "h2>=4.4.1",
+    "idna>=3.15",
+    "pydantic-settings>=2.14.2",
     "python-multipart>=0.0.30",
     # 1.3.1 fixes the open high advisories. 1.8+ breaks FileResponse under TestClient.
     "starlette>=1.7.0,<1.8",
