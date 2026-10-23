@@ -605,7 +605,7 @@
       <input id="apiUrl" type="url" placeholder="http://hyperturing.stanford.edu:8000" />
     </label>
     <label>Key
-      <input id="apiKey" type="password" class="short" placeholder="8-char ID" />
+      <input id="apiKey" type="password" class="short" placeholder="8-char ID" autocomplete="off" title="Used for this page only. Not saved in the browser." />
     </label>
     <button id="saveSettingsBtn">Save</button>
     <button id="refreshBtn" class="primary">Refresh</button>
@@ -791,7 +791,8 @@ const DEFAULT_URL = "http://hyperturing.stanford.edu:8000";
 
 const state = {
   apiUrl: localStorage.getItem(LS.url) || DEFAULT_URL,
-  apiKey: localStorage.getItem(LS.key) || "",
+  // The API key stays in memory for this page load. Do not persist it.
+  apiKey: "",
   experiments: [],
   selectedId: null,
   selectedExperiment: null,
@@ -1531,8 +1532,10 @@ function stopAutoRefresh() {
 
 // ---------- Init / event wiring ----------
 function init() {
+  // Older builds wrote the key here. Drop it so it does not sit in clear text.
+  localStorage.removeItem(LS.key);
   $("apiUrl").value = state.apiUrl;
-  $("apiKey").value = state.apiKey;
+  $("apiKey").value = "";
   $("autoRefresh").checked = localStorage.getItem(LS.auto) !== "0";
   $("logScaleToggle").checked = state.logScale;
   $("searchInput").value = state.search;
@@ -1543,8 +1546,7 @@ function init() {
     state.apiUrl = $("apiUrl").value.trim() || DEFAULT_URL;
     state.apiKey = $("apiKey").value.trim();
     localStorage.setItem(LS.url, state.apiUrl);
-    localStorage.setItem(LS.key, state.apiKey);
-    toast("Settings saved.", "success", 2500);
+    toast("API URL saved. The key is kept for this page only.", "success", 2500);
     refresh();
   });
   $("refreshBtn").addEventListener("click", refresh);
@@ -1637,8 +1639,8 @@ function init() {
   if ($("autoRefresh").checked) startAutoRefresh();
 
   if (!state.apiKey) {
-    setConnection("Enter your API URL and 8-character key, then click Save.");
-    toast("Set your API URL and 8-character key, then click Save.", "info", 8000);
+    setConnection("Enter your API URL and 8-character key, then click Save. The key is not stored.");
+    toast("Set your API URL and 8-character key, then click Save. The key is not stored.", "info", 8000);
   } else {
     refresh();
   }

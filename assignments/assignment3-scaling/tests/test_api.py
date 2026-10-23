@@ -48,6 +48,17 @@ def test_dashboard_serves_html(client):
     assert "Scaling Experiments Dashboard" in response.text
 
 
+def test_dashboard_does_not_persist_api_key(client):
+    """The API key must stay in memory. CodeQL flags browser storage of it."""
+    html = client.get("/dashboard").text
+
+    assert "localStorage.setItem(LS.key" not in html
+    assert "sessionStorage" not in html
+    assert "document.cookie" not in html
+    assert "localStorage.removeItem(LS.key)" in html
+    assert 'state.apiKey = $("apiKey").value.trim();' in html
+
+
 def test_budget(client, db_session_factory):
     with db_session_factory.begin() as session:
         user = UserTable(sunet_id="alice", api_key="test-api-key")

@@ -10,7 +10,7 @@ dependencies = [
     # Intel Macs
     "tqdm>=4.67.1",
     "wandb>=0.19.7",
-    "pytest>=8.3.5",
+    "pytest>=9.0.3",
     "xopen>=2.0.2",
     "resiliparse>=0.15.2",
     "fasttext>=0.9.3",
@@ -33,7 +33,7 @@ dependencies = [
     "polars>=1.40.1",
     "warcio>=1.8.1",
     "pytest-timeout>=2.4.0",
-    "torch>=2.11.0",
+    "torch>=2.13.0",
 ]
 
 [tool.setuptools.packages.find]
@@ -45,7 +45,13 @@ python-preference = "managed"
 # Floors for transitive high/critical advisories (brotli via fastwarc, protobuf).
 constraint-dependencies = [
     "brotli>=1.2.0",
+    "filelock>=3.20.3",
+    "h2>=4.4.1",
+    "idna>=3.15",
     "protobuf>=6.33.5",
+    "pygments>=2.20.0",
+    "requests>=2.33.0",
+    "setuptools>=83",
 ]
 
 [tool.pytest.ini_options]
