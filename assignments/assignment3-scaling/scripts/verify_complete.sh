@@ -2,6 +2,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+uv sync -q --extra server
+export INTERNAL_API_KEY="${INTERNAL_API_KEY:-test-internal-key}"
+
 echo "== pytest =="
 uv run pytest -q
 
