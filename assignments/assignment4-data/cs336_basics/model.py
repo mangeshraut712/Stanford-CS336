@@ -245,9 +245,16 @@ class BasicsTransformerLM(nn.Module):
             # Take the logits for the next token
             next_token_logits = logits[:, -1]
             # apply temperature scaling
-            temperature_scaled_next_token_logits = next_token_logits / temperature
+            if temperature < 0:
+                raise ValueError(f"temperature must be non-negative, got {temperature}")
+            if temperature == 0:
+                temperature_scaled_next_token_logits = next_token_logits
+            else:
+                temperature_scaled_next_token_logits = next_token_logits / temperature
             # If top-k is provided, take the tokens with the highest score
-            if top_k:
+            if top_k is not None:
+                if top_k < 1:
+                    raise ValueError(f"top_k must be an integer >= 1, got {top_k}")
                 topk_values, _ = torch.topk(
                     temperature_scaled_next_token_logits,
                     min(top_k, temperature_scaled_next_token_logits.size(-1)),
@@ -255,9 +262,14 @@ class BasicsTransformerLM(nn.Module):
                 # Get the score of the kth item that we kept---items with lower scores should be masked.
                 threshold = topk_values[:, -1]
                 topk_mask = temperature_scaled_next_token_logits < threshold
-                temperature_scaled_next_token_logits.masked_fill(topk_mask, float("-inf"))
-            next_token_probabilities = F.softmax(temperature_scaled_next_token_logits, dim=-1)
-            next_token_id = torch.multinomial(next_token_probabilities, 1)
+                temperature_scaled_next_token_logits = temperature_scaled_next_token_logits.masked_fill(
+                    topk_mask, float("-inf")
+                )
+            if temperature == 0:
+                next_token_id = torch.argmax(temperature_scaled_next_token_logits, dim=-1, keepdim=True)
+            else:
+                next_token_probabilities = F.softmax(temperature_scaled_next_token_logits, dim=-1)
+                next_token_id = torch.multinomial(next_token_probabilities, 1)
             # End generation if we see the EOS token ID
             if eos_token_id is not None and next_token_id.item() == eos_token_id:
                 break
