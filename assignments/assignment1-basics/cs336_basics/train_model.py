@@ -282,7 +282,9 @@ class BasicsTransformerLM(nn.Module):
                 break
             logits = self.forward(x[:, -self.context_length :])[:, -1]
             next_token_logits = logits if temperature == 0 else logits / temperature
-            if top_k:
+            if top_k is not None:
+                if top_k < 1:
+                    raise ValueError(f"top_k must be an integer >= 1, got {top_k}")
                 topk_values, _ = torch.topk(
                     next_token_logits, min(top_k, next_token_logits.size(-1))
                 )
