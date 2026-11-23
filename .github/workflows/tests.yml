@@ -40,8 +40,11 @@ jobs:
           python-version: "3.12"
           enable-cache: true
           cache-dependency-glob: |
-            assignments/**/uv.lock
-            assignments/**/pyproject.toml
+            assignments/${{ matrix.assignment }}/uv.lock
+            assignments/${{ matrix.assignment }}/pyproject.toml
+            assignments/${{ matrix.assignment }}/**/uv.lock
+            assignments/${{ matrix.assignment }}/**/pyproject.toml
+          cache-suffix: ${{ matrix.assignment }}-pytest
 
       - name: Start PostgreSQL
         if: matrix.postgres
@@ -103,8 +106,11 @@ jobs:
           python-version: "3.12"
           enable-cache: true
           cache-dependency-glob: |
-            assignments/**/uv.lock
-            assignments/**/pyproject.toml
+            assignments/${{ matrix.assignment }}/uv.lock
+            assignments/${{ matrix.assignment }}/pyproject.toml
+            assignments/${{ matrix.assignment }}/**/uv.lock
+            assignments/${{ matrix.assignment }}/**/pyproject.toml
+          cache-suffix: ${{ matrix.assignment }}-typecheck
 
       - name: Sync dependencies
         working-directory: assignments/${{ matrix.assignment }}
