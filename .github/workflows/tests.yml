@@ -38,7 +38,13 @@ jobs:
         uses: astral-sh/setup-uv@v10.3.2
         with:
           python-version: "3.12"
-          enable-cache: false
+          enable-cache: true
+          cache-dependency-glob: |
+            assignments/${{ matrix.assignment }}/uv.lock
+            assignments/${{ matrix.assignment }}/pyproject.toml
+            assignments/${{ matrix.assignment }}/**/uv.lock
+            assignments/${{ matrix.assignment }}/**/pyproject.toml
+          cache-suffix: ${{ matrix.assignment }}-pytest
 
       - name: Start PostgreSQL
         if: matrix.postgres
@@ -98,7 +104,13 @@ jobs:
         uses: astral-sh/setup-uv@v10.3.2
         with:
           python-version: "3.12"
-          enable-cache: false
+          enable-cache: true
+          cache-dependency-glob: |
+            assignments/${{ matrix.assignment }}/uv.lock
+            assignments/${{ matrix.assignment }}/pyproject.toml
+            assignments/${{ matrix.assignment }}/**/uv.lock
+            assignments/${{ matrix.assignment }}/**/pyproject.toml
+          cache-suffix: ${{ matrix.assignment }}-typecheck
 
       - name: Sync dependencies
         working-directory: assignments/${{ matrix.assignment }}
