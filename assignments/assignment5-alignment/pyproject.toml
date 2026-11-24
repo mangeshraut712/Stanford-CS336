@@ -13,7 +13,7 @@ dependencies = [
     "pylatexenc>=2.10",
     # 2.13 clears the torch.jit.script advisory. vLLM 0.30+ requires exactly 2.13.0.
     "torch>=2.13.0",
-    "transformers>=5.10.4,<5.11",
+    "transformers>=5.16.1,<5.20",
     "typer>=0.15.4",
     "xopen>=2.0.2",
 ]
@@ -22,11 +22,11 @@ dependencies = [
 gpu = [
     "alpaca-eval>=0.6.6",
     "torch>=2.13.0",
-    # 0.30 clears the open vLLM advisories and pins torch==2.13.0.
+    # 0.32 clears the open vLLM advisories, pins torch==2.13.0 and needs transformers>=5.16.1.
     # Wheels are published for Linux x86_64, not macOS.
     # flash-attn is not pinned: the old GitHub release wheel returns 401
     # through Dependabot's proxy, so `uv lock` cannot refresh this extra.
-    "vllm>=0.30.0 ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "vllm>=0.32.0 ; sys_platform == 'linux' and platform_machine == 'x86_64'",
     "wandb>=0.26.0",
 ]
 plots = [

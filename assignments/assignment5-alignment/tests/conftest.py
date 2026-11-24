@@ -11,6 +11,7 @@ from torch import Tensor
 from tokenizers import Tokenizer
 from tokenizers.models import WordLevel
 from tokenizers.pre_tokenizers import Whitespace
+from safetensors.torch import load_file
 from transformers import AutoModelForCausalLM, GPT2Config, GPT2LMHeadModel, PreTrainedTokenizerFast
 
 from .common import FIXTURES_PATH
@@ -287,6 +288,16 @@ def tiny_train_model(tokenizer):
         pad_token_id=tokenizer.pad_token_id,
     )
     model = GPT2LMHeadModel(config)
+    # Load recorded weights instead of trusting the seeded random init: the
+    # order transformers draws init values in changed between 5.10 and 5.19,
+    # which moved every train-step snapshot. The file holds the weights
+    # transformers 5.10.4 drew for this config under torch.manual_seed(0).
+    weights = load_file(FIXTURES_PATH / "tiny-train-gpt2-init.safetensors")
+    params = dict(model.named_parameters())
+    assert weights.keys() == params.keys(), sorted(weights.keys() ^ params.keys())
+    with torch.no_grad():
+        for name, param in params.items():
+            param.copy_(weights[name])
     model.train()
     return model.cpu()
 
