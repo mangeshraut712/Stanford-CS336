@@ -57,3 +57,9 @@ def test_mask_ips():
     masked_text, num_masked = run_mask_ips(test_string)
     assert masked_text == expected_masked_text
     assert num_masked == 1
+
+
+def test_mask_emails_sentence_final_period():
+    masked_text, num_masked = run_mask_emails("Write to test@gmail.com. Thanks!")
+    assert masked_text == "Write to |||EMAIL_ADDRESS|||. Thanks!"
+    assert num_masked == 1
