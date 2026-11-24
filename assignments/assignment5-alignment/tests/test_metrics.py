@@ -52,3 +52,14 @@ def test_parse_gsm8k_response_unknown():
     )
     parsed_response = run_parse_gsm8k_response(model_output=model_output)
     assert not parsed_response
+
+
+def test_parse_gsm8k_response_thousands_separator():
+    assert run_parse_gsm8k_response(model_output="The total is $1,234.50") == "1234.50"
+    assert run_parse_gsm8k_response(model_output="She earned 12,000 dollars.") == "12000"
+
+
+def test_parse_mmlu_response_ignores_article_a():
+    mmlu_example = {"subject": "virology", "question": "q", "options": [], "answer": "A"}
+    model_output = "The BK virus is a polyomavirus."
+    assert not run_parse_mmlu_response(mmlu_example=mmlu_example, model_output=model_output)

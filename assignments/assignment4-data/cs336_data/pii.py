@@ -11,7 +11,8 @@ IP_PLACEHOLDER = "|||IP_ADDRESS|||"
 EMAIL_PATTERN = re.compile(
     r"(?<![\w.])"
     r"[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-    r"(?![\w.])"
+    # A sentence-ending period may follow the address; another domain label may not.
+    r"(?!\w|\.\w)"
 )
 PHONE_PATTERN = re.compile(
     r"(?<!\d)"

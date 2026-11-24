@@ -400,7 +400,8 @@ def parse_mmlu_response(
     patterns = [
         r"(?:answer|option|choice)\s*(?:is|:)\s*\(?([A-D])\)?",
         r"\(([A-D])\)",
-        r"(?:^|\s)([A-D])(?:[\s\.:,]|$)",
+        # Case-sensitive, so the article "a" in prose is not read as choice A.
+        r"(?-i:(?:^|\s)([A-D])(?:[\s\.:,]|$))",
     ]
     for pattern in patterns:
         match = re.search(pattern, model_output, flags=re.IGNORECASE)
@@ -410,10 +411,11 @@ def parse_mmlu_response(
 
 
 def parse_gsm8k_response(model_output: str) -> str | None:
-    matches = re.findall(r"-?\d+(?:\.\d+)?", model_output)
+    # Keep thousands separators together: "$1,234.50" is 1234.50, not 234.50.
+    matches = re.findall(r"-?\d{1,3}(?:,\d{3})+(?:\.\d+)?|-?\d+(?:\.\d+)?", model_output)
     if not matches:
         return None
-    return matches[-1]
+    return matches[-1].replace(",", "")
 
 
 def _sequence_log_prob_sum(
