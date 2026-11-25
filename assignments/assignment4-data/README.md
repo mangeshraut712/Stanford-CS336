@@ -47,11 +47,11 @@ To download all data for the students, run `uv run modal run scripts/download_da
 
 To only download the files needed for running offline, run `uv run scripts/download_data.py --offline-only`.
 
-Implement the method `is_english` in [`./cs336_data/wet_files.py`](./cs336_data/wet_files.py) before downloading the full non-offline data.
+`is_english` lives in [`./cs336_data/langid.py`](./cs336_data/langid.py) (`make_is_english`); [`./cs336_data/wet_files.py`](./cs336_data/wet_files.py) imports it. Make sure it is implemented before downloading the full non-offline data.
 
 #### Modal
 
-Remove `environment_name` from `shared_data_volume` in [`./cs336_data/modal_utils.py`](./cs336_data/modal_utils.py)
+`shared_data_volume` in [`./cs336_data/modal_utils.py`](./cs336_data/modal_utils.py) already has no `environment_name` argument.
 
 ```python
 uv run modal run scripts/download_data.py
@@ -77,5 +77,5 @@ uv run modal run scripts/train.py --train-bin /root/data/your_data.bin
 
 To submit, run `./test_and_make_submission.sh` . This script will install your
 code's dependencies, run tests, and create a zip with the output. We
-should be able to unzip your submitted tarball and run
+should be able to unzip your submitted zip and run
 `./test_and_make_submission.sh` to verify your test results.

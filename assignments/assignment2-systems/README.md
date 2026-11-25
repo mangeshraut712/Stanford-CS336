@@ -58,6 +58,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 ## Submitting
 
 To submit, run `./test_and_make_submission.sh` . This script will install your
-code's dependencies, run tests, and create a gzipped tarball with the output. We
-should be able to unzip your submitted tarball and run
+code's dependencies, run tests, and create a zip with the output. We
+should be able to unzip your submitted zip and run
 `./test_and_make_submission.sh` to verify your test results.
